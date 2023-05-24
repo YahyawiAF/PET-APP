@@ -1,11 +1,17 @@
 import { Routes, Route } from "react-router-dom";
 
-// pages
 import { ProtectedRoute, PublicRoute } from "./ProtectedRoute.tsx";
+
+import { useAuth } from "../context/AuthProvider";
+
+import {Layout} from "../layout/Main"
+
+//pages 
 import Login from "../pages/Login";
 import Home from "../pages/Home";
-import {Layout} from "../layout/Main"
-import { useAuth } from "../context/AuthProvider";
+import Form from "../pages/Form";
+import Profile from "../pages/Profile";
+
 
 function RouteSection() {
   const { session } = useAuth();
@@ -15,7 +21,9 @@ function RouteSection() {
         <Route path="/" element={<Login />} />
       </Route>
       <Route element={<ProtectedRoute session={session} ><Layout /></ProtectedRoute>}>
+        <Route path="/form" element={<Form />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/profile" element={<Profile />} />
       </Route>
     </Routes>
   );
