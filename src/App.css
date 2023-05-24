@@ -1,11 +1,11 @@
 .form-box {
-  width:380px;
-  height:450px;
-  background-color:black;
-  padding:20px;
-  display:flex;
-  flex-direction:column;
-  justify-content:flex-start;
-  opacity:0.5;
-  border-radius:2%;
+  width: 380px;
+  height: 450px;
+  background-color: black;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  opacity: 0.5;
+  border-radius: 2%;
 }
