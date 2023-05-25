@@ -30,12 +30,14 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
+
   useEffect(() => {
     let gotSession = localStorage.getItem("authSession");
     if (gotSession) {
       setSession(JSON.parse(gotSession));
       setUser(JSON.parse(gotSession));
     }
+    
     async function getSession() {
       setLoading(false);
       const {

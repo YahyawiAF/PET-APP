@@ -72,7 +72,7 @@ const Home = () => {
 
   useEffect(() => {
     if (id) {
-      const fetchSmoothies = async () => {
+      const fetchPets = async () => {
         let { data: pet, error } = await supabase
           .from("pet")
           .select()
@@ -86,7 +86,7 @@ const Home = () => {
           setPetInfo(pet[0] as unknown as PET);
         }
       };
-      fetchSmoothies();
+      fetchPets();
     }
   }, [id]);
 
@@ -121,7 +121,6 @@ const Home = () => {
 
   const onchangeChecked = (e: any) => {
     const { name, value } = e.target;
-    console.log("vale", value, "name", name);
     setPetInfo((prevState) => ({
       ...prevState,
       [name]: value === "yes" ? true : false,

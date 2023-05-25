@@ -1,7 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import Select, { GroupBase, OptionsOrGroups } from "react-select";
 import styled from "styled-components";
+import { useAuth } from "../../context/AuthProvider";
+import supabase from "../../config/supabaseClient";
+
+interface PROFILE {
+  firstName: string;
+  lastName: string;
+  gender: string;
+  dateOfBirth: null;
+  address: string;
+  phoneNumber: string;
+  email: string;
+  id?: string
+}
 
 type SelectOptionType = { label: string; value: string };
 
@@ -17,7 +30,9 @@ const Wrapper = styled.div`
 `;
 
 const Profile = () => {
-  const [ownerInfo, setOwnerInfo] = useState({
+  const {user} = useAuth()
+  const [fetchError, setFetchError] = useState<string | null>(null);
+  const [ownerInfo, setOwnerInfo] = useState<PROFILE>({
     firstName: "",
     lastName: "",
     gender: "",
@@ -25,8 +40,6 @@ const Profile = () => {
     address: "",
     phoneNumber: "",
     email: "",
-
-    // Add more fields as needed
   });
 
   const [selectedGender, setSelectedGender] = useState<SelectOptionType | null>(
@@ -47,6 +60,26 @@ const Profile = () => {
     { value: "other", label: "Other" },
   ];
 
+  useEffect(() => {
+    if (user?.id) {
+      const fetchProfile = async () => {
+        let { data: profile, error } = await supabase
+          .from("profiles")
+          .select()
+          .eq("userID", user?.id);
+
+        if (error) {
+          setFetchError("Could not fetch the smoothies");
+          // setPets(null);
+        }
+        if (profile) {
+          setOwnerInfo(profile[0] as unknown as PROFILE );
+        }
+      };
+      fetchProfile();
+    }
+  }, [user]);
+
   const handleChangeGender = (option: SelectOptionType | null) => {
     if (option) {
       setSelectedGender(option);
@@ -57,10 +90,21 @@ const Profile = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Handle form submission logic here
-    console.log(ownerInfo);
+    if(ownerInfo?.id) {
+      const { error } = await supabase.from("profiles").update(ownerInfo).eq("id", ownerInfo.id);
+      if (error) {
+        setFetchError("Please fill in all the fields correctly.");
+      }
+    } else {
+      const { error } = await supabase.from("profiles").insert({...ownerInfo, userID: user.id});
+      if (error) {
+        setFetchError("Please fill in all the fields correctly.");
+      }
+    }
+
   };
 
   return (
@@ -107,7 +151,7 @@ const Profile = () => {
           <Control
             type="date"
             name="dateOfBirth"
-            value={ownerInfo.dateOfBirth || ""}
+            value={ownerInfo.dateOfBirth}
             onChange={handleChange}
             required
           />

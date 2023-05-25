@@ -17,11 +17,10 @@ const LoadMoreButton = styled.button`
 export const CardList: FC<Props> = ({ pets, onLoadMore, canLoadMore }) => {
   return (
     <main role="main">
-      <div className="album py-5 bg-light">
-        <div className="container">
+      <div className="py-5">
           <div className="row">
             {pets.map((pet) => (
-              <Col key={pet.id} md={4} lg={4}>
+              <Col key={pet.id} md={4} lg={3} xl={3}>
                 <CardCat key={pet.id} pet={pet} img={pet.url} id={pet.id} />
               </Col>
             ))}
@@ -29,7 +28,6 @@ export const CardList: FC<Props> = ({ pets, onLoadMore, canLoadMore }) => {
               <LoadMoreButton onClick={onLoadMore}>Load more</LoadMoreButton>
             )}
           </div>
-        </div>
       </div>
     </main>
   );
