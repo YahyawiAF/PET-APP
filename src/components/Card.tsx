@@ -11,13 +11,17 @@ type Props = {
 export const CardCat: FC<Props> = ({ img, id, pet }) => {
   const navigate = useNavigate();
   return (
-    <Card className="card mb-4 box-shadow" style={{ width: "18rem" }}>
+    <Card className="card mb-4 box-shadow" >
       <Card.Body>
-        <Card.Title>{pet.name}</Card.Title>
+        <Card.Title><span className="fw-bold">Pet Name: </span>{pet.name}</Card.Title>
 
         {/* <Card.Subtitle className="mb-2 text-muted">{pet.}</Card.Subtitle> */}
         <Card.Text>
           <span className="fw-bold">Breed:</span> {pet.breed}
+        </Card.Text>
+
+        <Card.Text>
+          <span className="fw-bold">Gender:</span> {pet.gender}
         </Card.Text>
 
         <Card.Text>
@@ -29,11 +33,35 @@ export const CardCat: FC<Props> = ({ img, id, pet }) => {
         </Card.Text>
 
         <Card.Text>
-          <span className="fw-bold">First vaccination:</span> {pet.isFirstVaccination ? "Yes": "No"}
+          <span className="fw-bold">First vaccination:</span>{" "}
+          {pet.isFirstVaccination ? "Yes" : "No"}
         </Card.Text>
 
-        <Card.Text>Contact information: {pet.color}</Card.Text>
-        <Card.Link href="/form">edite</Card.Link>
+        {!pet.isFirstVaccination && (
+          <Card.Text>
+            <span className="fw-bold">Vaccination reaction:</span>{" "}
+            {pet.vaccinationReaction ? "Yes" : "No"}
+          </Card.Text>
+        )}
+
+        <Card.Text>
+          <span className="fw-bold">
+            {pet.gender === "Male" ? "Neutering:" : "Spaying:"}
+          </span>{" "}
+          {pet.neutering ? "Yes" : "No"}
+        </Card.Text>
+
+        {!pet.neutering && (
+          <Card.Text>
+            <span className="fw-bold">Pregnant:</span>{" "}
+            {pet.pregnant ? "Yes" : "No"}
+          </Card.Text>
+        )}
+        <Card.Text>
+          <span className="fw-bold">Sick:</span>{" "}
+          {pet.sick ? "Yes" : "No"}
+        </Card.Text>
+        <Card.Link href={`/form/${pet.id}`}>Edite</Card.Link>
         {/* <Card.Link href="#">Another Link</Card.Link> */}
       </Card.Body>
     </Card>

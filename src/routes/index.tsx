@@ -22,6 +22,7 @@ function RouteSection() {
       </Route>
       <Route element={<ProtectedRoute session={session} ><Layout /></ProtectedRoute>}>
         <Route path="/form" element={<Form />} />
+        <Route path="/form/:id" element={<Form />} />
         <Route path="/home" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
       </Route>
