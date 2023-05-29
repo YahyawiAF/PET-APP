@@ -6,6 +6,7 @@ import Breeds from "../../constant/breed.json";
 import supabase from "../../config/supabaseClient";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface PET {
   name: string;
@@ -42,6 +43,8 @@ const Wrapper = styled.div`
 `;
 
 const Home = () => {
+  const { t } = useTranslation();
+
   const [fetchError, setFetchError] = useState<string | null>(null);
   let { id } = useParams();
   const [petInfo, setPetInfo] = useState<PET>({
@@ -123,9 +126,10 @@ const Home = () => {
     const { name, value } = e.target;
     setPetInfo((prevState) => ({
       ...prevState,
-      [name]: value === "yes" ? true : false,
+      [name]: value === t("yes") ? true : false,
     }));
   };
+
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -150,7 +154,7 @@ const Home = () => {
     <Wrapper>
       <FormStyled onSubmit={handleSubmit}>
         <Form.Group className="mb-3" controlId="name">
-          <Label>Name</Label>
+          <Label>{t("petNameLabel")}</Label>
           <Control
             type="text"
             name="name"
@@ -162,10 +166,10 @@ const Home = () => {
         </Form.Group>
 
         <Form.Group className="mb-3 d-flex flex-column" controlId="owner">
-          <Label className="me-4">Not my Pet</Label>
+          <Label className="me-4">{t("notMyPet")}</Label>
           <Form.Check
             inline
-            label="Yes"
+            label={t("yes")}
             name="owner"
             checked={Boolean(petInfo.owner)}
             onChange={onchangeChecked}
@@ -184,9 +188,7 @@ const Home = () => {
 
         {petInfo.owner === "no" && (
           <Form.Group className="mb-3" controlId="contactInfo">
-            <Label>
-              If you are not the pet's owner please provide owner contact info
-            </Label>
+            <Label>{t("ownerContactInfo")}</Label>
             <Control
               type="text"
               name="contactInfo"
@@ -220,11 +222,11 @@ const Home = () => {
           className="mb-3 d-flex flex-column"
           controlId="knowsDateOfBirth"
         >
-          <Label className="me-4">do you know the pet's date of birth</Label>
+          <Label className="me-4">{t("dateOfBirthQuestion")}</Label>
           <Form.Check
             inline
             checked={Boolean(petInfo.knowsDateOfBirth)}
-            label="Yes"
+            label={t("yes")}
             onChange={onchangeChecked}
             name="knowsDateOfBirth"
             value="yes"
@@ -243,7 +245,7 @@ const Home = () => {
 
         {petInfo.knowsDateOfBirth ? (
           <Form.Group className="mb-3" controlId="dateOfBirth">
-            <Label>pet date of birth</Label>
+            <Label>{t("dateOfBirth")}</Label>
             <Control
               type="date"
               name="dateOfBirth"
@@ -256,7 +258,7 @@ const Home = () => {
         ) : (
           <Container className="d-flex gap-4 justify-content-between p-0">
             <Form.Group className="mb-3" controlId="yearOfBirth">
-              <Label>Year of birth</Label>
+              <Label>{t("yearOfBirth")}</Label>
               <Control
                 type="number"
                 name="yearOfBirth"
@@ -268,7 +270,7 @@ const Home = () => {
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="monthOfBirth">
-              <Label>Month of birth</Label>
+              <Label>{t("monthOfBirth")}</Label>
               <Control
                 type="number"
                 name="monthOfBirth"
@@ -282,17 +284,17 @@ const Home = () => {
         )}
 
         <Form.Group className="mb-3" controlId="breed">
-          <Label>Breed</Label>
+          <Label>{t("breedLabel")}</Label>
           <Select
             value={selectedBreed}
             onChange={handleChangeBreed}
-            placeholder={<div>Please Select a Breed</div>}
+            placeholder={<div>{t("selectBreed")}</div>}
             options={options}
           />
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="color">
-          <Label>Color</Label>
+          <Label>{t("colorLabel")}</Label>
           <Control
             type="text"
             name="color"
@@ -307,10 +309,10 @@ const Home = () => {
           className="mb-3 d-flex flex-column"
           controlId="isFirstVaccination"
         >
-          <Label className="me-4">Is this pet first vaccination</Label>
+          <Label className="me-4">{t("firstVaccinationQuestion")}</Label>
           <Form.Check
             inline
-            label="Yes"
+            label={t("yes")}
             value="yes"
             checked={Boolean(petInfo.isFirstVaccination)}
             name="isFirstVaccination"
@@ -329,12 +331,12 @@ const Home = () => {
         </Form.Group>
 
         <Form.Group className="mb-3 d-flex flex-column" controlId="neutering">
-          <Label className="me-4">Is this pet neutered/spayed </Label>
+          <Label className="me-4">{t("neuteredQuestion")}</Label>
           <Form.Check
             inline
             checked={Boolean(petInfo.neutering)}
             onChange={onchangeChecked}
-            label="Yes"
+            label={t("yes")}
             value="yes"
             name="neutering"
             type="radio"
@@ -354,13 +356,11 @@ const Home = () => {
           className="mb-3 d-flex flex-column"
           controlId="vaccinationReaction"
         >
-          <Label className="me-4">
-            Has pet had reactions to a vaccine in the past
-          </Label>
+          <Label className="me-4">{t("vaccineReactionsQuestion")}</Label>
           <Form.Check
             onChange={onchangeChecked}
             inline
-            label="Yes"
+            label={t("yes")}
             value="yes"
             checked={Boolean(petInfo.vaccinationReaction)}
             name="vaccinationReaction"
@@ -378,7 +378,7 @@ const Home = () => {
         </Form.Group>
 
         <Form.Group className="mb-3 d-flex flex-column" controlId="gender">
-          <Label className="me-4">Is your pet male or female</Label>
+          <Label className="me-4">{t("genderQuestion")}</Label>
           <Form.Check
             onChange={onchangeChecked}
             inline
@@ -400,12 +400,12 @@ const Home = () => {
         </Form.Group>
 
         <Form.Group className="mb-3 d-flex flex-column" controlId="sick">
-          <Label className="me-4">Is your pet sick</Label>
+          <Label className="me-4">{t("sickQuestion")}</Label>
           <Form.Check
             checked={Boolean(petInfo.sick)}
             onChange={onchangeChecked}
             inline
-            label="yes"
+            label={t("yes")}
             value="yes"
             name="sick"
             type="radio"
@@ -422,12 +422,12 @@ const Home = () => {
         </Form.Group>
 
         <Form.Group className="mb-3 d-flex flex-column" controlId="pregnant">
-          <Label className="me-4">Is your pet pregnant</Label>
+          <Label className="me-4">{t("pregnantQuestion")}</Label>
           <Form.Check
             checked={Boolean(petInfo.pregnant)}
             onChange={onchangeChecked}
             inline
-            label="yes"
+            label={t("yes")}
             value="yes"
             name="pregnant"
             type="radio"
@@ -446,7 +446,7 @@ const Home = () => {
         {/* Add more Form.Group components for additional fields */}
         <div className="d-flex justify-content-end">
           <ButtonS variant="primary" type="submit">
-            {!id ? "Add Pet" : "Edit Pet"}
+            {!id ? t("addPet") : t("Edit Pet")}
           </ButtonS>
         </div>
         {formError && <p className="error">{formError}</p>}

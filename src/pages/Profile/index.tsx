@@ -4,6 +4,9 @@ import Select, { GroupBase, OptionsOrGroups } from "react-select";
 import styled from "styled-components";
 import { useAuth } from "../../context/AuthProvider";
 import supabase from "../../config/supabaseClient";
+import { useTranslation } from "react-i18next";
+
+
 
 interface PROFILE {
   firstName: string;
@@ -30,6 +33,8 @@ const Wrapper = styled.div`
 `;
 
 const Profile = () => {
+  const { t } = useTranslation();
+
   const {user} = useAuth()
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [ownerInfo, setOwnerInfo] = useState<PROFILE>({
@@ -112,7 +117,7 @@ const Profile = () => {
       <FormStyled onSubmit={handleSubmit}>
         <ContainerS className="d-flex gap-4 justify-content-between p-0" >
           <Form.Group className="fied-name mb-3" controlId="firstName">
-            <Label>First name</Label>
+            <Label>{t("firstName")}</Label>
             <Control
               type="text"
               name="firstName"
@@ -124,7 +129,7 @@ const Profile = () => {
           </Form.Group>
 
           <Form.Group className="fied-name mb-3" controlId="lastName">
-            <Label>Last name</Label>
+            <Label>{t("lastName")}</Label>
             <Control
               type="text"
               name="lastName"
@@ -136,18 +141,18 @@ const Profile = () => {
           </Form.Group>
         </ContainerS>
 
-        <Form.Group className="mb-3" controlId="breed">
-          <Label>Gender</Label>
+        <Form.Group className="mb-3" controlId="gender">
+          <Label>{t("genderLabel")}</Label>
           <Select
             value={selectedGender}
             onChange={handleChangeGender}
-            placeholder={<div>Please select your gender</div>}
+            placeholder={<div>{t("selectGender")}</div>}
             options={genderOptions}
           />
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="dateOfBirth">
-          <Label>Date of birth</Label>
+          <Label>{t("dateOfBirth")}</Label>
           <Control
             type="date"
             name="dateOfBirth"
@@ -158,7 +163,7 @@ const Profile = () => {
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="address">
-          <Label>Address</Label>
+          <Label>{t("address")}</Label>
           <Control
             type="text"
             name="address"
@@ -170,7 +175,7 @@ const Profile = () => {
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="phoneNumber">
-          <Label>Phone number</Label>
+          <Label>{t("phoneNumber")}</Label>
           <Control
             type="tel"
             name="phoneNumber"
@@ -182,7 +187,7 @@ const Profile = () => {
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="email">
-          <Label>Email</Label>
+          <Label>{t("email")}</Label>
           <Control
             type="email"
             name="email"
@@ -197,7 +202,7 @@ const Profile = () => {
 
         <div className="d-flex justify-content-end">
           <ButtonS variant="primary" type="submit">
-            Add Owner
+          {t("addOwner")}
           </ButtonS>
         </div>
       </FormStyled>
