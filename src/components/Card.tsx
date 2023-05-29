@@ -6,6 +6,8 @@ import { FiEdit } from "react-icons/fi";
 import { CgShapeHexagon } from "react-icons/cg";
 import Cat from "../assets/cat.jpg";
 import { Button } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
+
 
 const CardStyled = styled(Card)`
   border-radius: 0;
@@ -85,14 +87,16 @@ type Props = {
 
 export const CardCat: FC<Props> = ({ img, id, pet }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
   return (
     <CardStyled className="card mb-3">
-      <ImageWrapper>
+      {/* <ImageWrapper>
         <CardImg  variant="top" src={Cat} />
-      </ImageWrapper>
+      </ImageWrapper> */}
       <Card.Body>
         <CardTitle className="d-flex gap-2">
-          <span className="fw-bold">Pet Name:</span> {pet.name}
+          <span className="fw-bold">{t("petNameLabel")}{":"}</span> {pet.name}
         </CardTitle>
 
         {/* <Card.Subtitle className="mb-2 text-muted">{pet.}</Card.Subtitle> */}
@@ -100,35 +104,35 @@ export const CardCat: FC<Props> = ({ img, id, pet }) => {
           <span>
             <CgShapeHexagonStyled />
           </span>
-          <span className="fw-bold">Breed:</span> {pet.breed}
+          <span className="fw-bold">{t("breedLabel")}{":"}</span> {pet.breed}
         </CardText>
 
         <CardText>
           <span>
             <CgShapeHexagonStyled />
           </span>
-          <span className="fw-bold">Gender:</span> {pet.gender}
+          <span className="fw-bold">{t("genderLabel")}{":"}</span> {pet.gender}
         </CardText>
 
         <CardText>
           <span>
             <CgShapeHexagonStyled />
           </span>
-          <span className="fw-bold">DOB:</span> {pet.dateOfBirth}
+          <span className="fw-bold">{t("dobLabel")}{":"}</span> {pet.dateOfBirth}
         </CardText>
 
         <CardText>
           <span>
             <CgShapeHexagonStyled />
           </span>
-          <span className="fw-bold">Color:</span> {pet.color}
+          <span className="fw-bold">{t("colorLabel")}{":"}</span> {pet.color}
         </CardText>
 
         <CardText>
           <span>
             <CgShapeHexagonStyled />
           </span>
-          <span className="fw-bold">First vaccination:</span>{" "}
+          <span className="fw-bold">{t("firstVaccinationLabel")}{":"}</span>{" "}
           {pet.isFirstVaccination ? "Yes" : "No"}
         </CardText>
 
@@ -168,7 +172,7 @@ export const CardCat: FC<Props> = ({ img, id, pet }) => {
           <span className="fw-bold">Sick:</span> {pet.sick ? "Yes" : "No"}
         </CardText> */}
         <ButtonS onClick={() => navigate(`/form/${pet.id}`)}>
-          Edit Pet Info
+          {t("editPetInfoButton")}
         </ButtonS>
       </Card.Body>
     </CardStyled>

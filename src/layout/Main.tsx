@@ -1,19 +1,25 @@
 import { Button } from "react-bootstrap";
 import { Link, Outlet } from "react-router-dom";
 import { MdLogout } from "react-icons/md";
+import { ReactComponent as SPicon } from "../assets/spain.svg";
+import { ReactComponent as UKicon } from "../assets/uk.svg";
 
 import styled from "styled-components";
 import { useAuth } from "../context/AuthProvider";
 import { ReactComponent as IconPet } from "../assets/pets-svgrepo-com.svg";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+
+const Topbar = styled.div`
+  padding-block: 10px;
+  box-sizing: border-box;
+  height: 40px;
+`;
 
 const Navbar = styled.div`
-position : fixed ;
-padding-block: 10px;
-z-index: 99;
-top: 0;
-right: 0;
-left: 0;"
+  position: sticky !important;
+  padding-block: 10px;
+  top: O;
 `;
 const MdLogoutStyled = styled(MdLogout)`
   color: white;
@@ -58,7 +64,12 @@ const RightNavSection = styled.div`
 `;
 
 const Header = () => {
+  const { i18n, t } = useTranslation();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  const changeLanguage = (language: string) => {
+    i18n.changeLanguage(language);
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -84,7 +95,19 @@ const Header = () => {
   };
 
   return (
-    <header>
+    <header style={{position:"fixed", width:"100%", zIndex:"99"}}>
+      <Topbar className=" bg-dark  d-flex justify-content-end align-items-center ">
+        <div className="container d-flex justify-content-end gap-3">
+          <SPicon
+            className="navbar-brand d-flex align-items-center"
+            onClick={() => changeLanguage("es")}
+          />
+          <UKicon
+            className="navbar-brand d-flex align-items-center"
+            onClick={() => changeLanguage("en")}
+          />
+        </div>
+      </Topbar>
       <Navbar className="navbar navbar-dark bg-dark box-shadow">
         <div className="container d-flex justify-content-between">
           <Link to="/home" className="navbar-brand d-flex align-items-center">
@@ -98,8 +121,8 @@ const Header = () => {
             {/* <strong>Pet</strong> */}
           </Link>
           <RightNavSection>
-            <LinkStyled to="/home">Home</LinkStyled>
-            <LinkStyled to="/profile">Profile</LinkStyled>
+            <LinkStyled to="/home">{t("home")}</LinkStyled>
+            <LinkStyled to="/profile">{t("profile")}</LinkStyled>
             {windowWidth <= 600 ? (
               <MdLogoutStyled onClick={handleSign} />
             ) : (
@@ -116,7 +139,7 @@ export const Layout = () => {
   return (
     <LayoutContainer>
       <Header />
-      <div className="flex-grow-1" style={{ marginTop: "4.5rem" }}>
+      <div className="flex-grow-1" style={{marginTop:"8rem"}}>
         <Outlet />
       </div>
     </LayoutContainer>

@@ -7,6 +7,7 @@ import styled from "styled-components";
 import supabase from "../../config/supabaseClient";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { MdOutlineAddCircle } from "react-icons/md";
 
 const LIMIT_PER_PAGE = 10;
 type Breed = {
@@ -49,7 +50,12 @@ const HomePage: FC = () => {
   return (
     <Wrapper className="container">
       <WrapperOption>
-        <ButtonAdd onClick={() => navigate(`/form`)}>Add Pet</ButtonAdd>
+        <ButtonAdd onClick={() => navigate(`/form`)}>
+          <span>
+            <MdOutlineAddCircle />
+          </span>{" "}
+          <span>Add Pet</span>{" "}
+        </ButtonAdd>
       </WrapperOption>
       {pets && pets?.length > 0 ? (
         <CardList
@@ -65,21 +71,61 @@ const HomePage: FC = () => {
 };
 
 const ButtonAdd = styled(Button)`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   background: transparent;
   border: 2px solid #000;
   color: #000;
-  font-size: 24px;
-  padding: 8px 20px;
+  font-size: 21px;
+  line-height:48px;
+  padding: 0px 15px;
   font-weight: bold;
-  position: fixed;
+
   &:hover {
     background: var(--dark);
     border: 2px solid #000;
     color: white;
   }
-  @media only screen and (max-width : 600px) {
-    font-size: 20px;
-  padding: 8px 20px;
+
+  & > span:first-of-type {
+    font-size: 40px;
+    position: relative;
+    top: -3px;
+  }
+
+  @media only screen and (max-width: 600px) {
+    position: fixed;
+    top: 120px;
+    right: 10px;
+    border: none;
+    z-index: 9;
+    border-radius: 50%;
+    padding:0;
+    &:hover {
+      background: none;
+      border: none;
+    }
+    & > span:first-of-type {
+      font-size: 55px;
+      position: relative;
+      top: -3px;
+      padding: 0;
+
+      & > svg {
+        background-color: white;
+        border-radius: 50%;
+        box-shadow: 0px 0px 7px gray;
+      transition : 0.25s all linear;
+        &:hover {
+        background-color: black;
+      }
+      }
+    }
+
+    & > span:nth-of-type(2) {
+      display: none;
+    }
   }
 `;
 
@@ -87,8 +133,6 @@ const WrapperOption = styled.div`
   width: 100%;
   display: flex;
   justify-content: flex-end;
-  height: 50px;
-  z-index: 10;
 `;
 
 const Text = styled.p`
@@ -105,7 +149,6 @@ const Wrapper = styled.div`
   @media only screen and (max-width: 600px) {
     padding: 10px;
     overflow: hidden;
-
   }
 `;
 
