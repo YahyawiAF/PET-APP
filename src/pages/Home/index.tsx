@@ -47,6 +47,8 @@ const HomePage: FC = () => {
 
   const navigate = useNavigate();
 
+  console.log("pets", pets);
+
   return (
     <Wrapper className="container">
       <WrapperOption>
@@ -78,7 +80,7 @@ const ButtonAdd = styled(Button)`
   border: 2px solid #000;
   color: #000;
   font-size: 21px;
-  line-height:48px;
+  line-height: 48px;
   padding: 0px 15px;
   font-weight: bold;
 
@@ -101,7 +103,7 @@ const ButtonAdd = styled(Button)`
     border: none;
     z-index: 9;
     border-radius: 50%;
-    padding:0;
+    padding: 0;
     &:hover {
       background: none;
       border: none;
@@ -116,10 +118,10 @@ const ButtonAdd = styled(Button)`
         background-color: white;
         border-radius: 50%;
         box-shadow: 0px 0px 7px gray;
-      transition : 0.25s all linear;
+        transition: 0.25s all linear;
         &:hover {
-        background-color: black;
-      }
+          background-color: black;
+        }
       }
     }
 

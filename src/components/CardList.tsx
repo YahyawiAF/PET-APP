@@ -22,9 +22,9 @@ export const CardList: FC<Props> = ({ pets, onLoadMore, canLoadMore }) => {
     <main role="main">
       <div className="py-5">
         <div className="row">
-          {pets.map((pet) => (
+          {pets?.map((pet) => (
             <Col key={pet.id} md={4} lg={3} xl={3}>
-              <CardCat key={pet.id} pet={pet} img={pet.url} id={pet.id} />
+              <CardCat key={pet.id} pet={pet} img={pet?.url} id={pet?.id} />
             </Col>
           ))}
           {canLoadMore && (
