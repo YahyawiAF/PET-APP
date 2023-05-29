@@ -7,10 +7,11 @@ import supabase from "../../config/supabaseClient";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "../../context/AuthProvider";
 
 interface PET {
   name: string;
-  breed: string;
+  breed: {label: string, value: string};
   owner: string;
   contactInfo: string;
   dateOfBirth: null;
@@ -24,6 +25,7 @@ interface PET {
   sick: boolean;
   pregnant: boolean;
   knowsDateOfBirth: boolean;
+  userID: string;
 }
 
 type Props = {
@@ -47,9 +49,10 @@ const Home = () => {
 
   const [fetchError, setFetchError] = useState<string | null>(null);
   let { id } = useParams();
+  const {user} = useAuth()
   const [petInfo, setPetInfo] = useState<PET>({
     name: "",
-    breed: "",
+    breed: {label: "", value: ""},
     owner: "",
     contactInfo: "",
     dateOfBirth: null,
@@ -63,6 +66,7 @@ const Home = () => {
     gender: "",
     sick: false,
     pregnant: false,
+    userID: user.id
 
     // Add more fields as needed
   });
@@ -87,6 +91,7 @@ const Home = () => {
         }
         if (pet) {
           setPetInfo(pet[0] as unknown as PET);
+          setSelectedBreed(pet[0].breed)
         }
       };
       fetchPets();
@@ -100,7 +105,7 @@ const Home = () => {
       setSelectedBreed(option);
       setPetInfo((prevState) => ({
         ...prevState,
-        breed: option.label,
+        breed: option,
       }));
     }
   };
@@ -124,9 +129,10 @@ const Home = () => {
 
   const onchangeChecked = (e: any) => {
     const { name, value } = e.target;
+    console.log("name, value", name, value)
     setPetInfo((prevState) => ({
       ...prevState,
-      [name]: value === t("yes") ? true : false,
+      [name]: value === "yes" ? true : false,
     }));
   };
 
@@ -384,8 +390,8 @@ const Home = () => {
             inline
             label="Male"
             name="gender"
-            value="Male"
-            checked={petInfo.gender === "Male"}
+            value="yes"
+            checked={Boolean(petInfo.gender)}
             type="radio"
           />
           <Form.Check
@@ -393,8 +399,8 @@ const Home = () => {
             inline
             label="Female"
             name="gender"
-            value="Female"
-            checked={petInfo.gender === "Female"}
+            value="no"
+            checked={!Boolean(petInfo.gender)}
             type="radio"
           />
         </Form.Group>

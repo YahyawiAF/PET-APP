@@ -72,12 +72,12 @@ const Profile = () => {
           .from("profiles")
           .select()
           .eq("userID", user?.id);
-
         if (error) {
           setFetchError("Could not fetch the smoothies");
           // setPets(null);
         }
-        if (profile) {
+        if (profile && profile?.length > 0) {
+          
           setOwnerInfo(profile[0] as unknown as PROFILE );
         }
       };

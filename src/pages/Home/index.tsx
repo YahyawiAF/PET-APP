@@ -8,6 +8,7 @@ import supabase from "../../config/supabaseClient";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineAddCircle } from "react-icons/md";
+import { useAuth } from "../../context/AuthProvider";
 
 const LIMIT_PER_PAGE = 10;
 type Breed = {
@@ -20,10 +21,12 @@ const HomePage: FC = () => {
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [pets, setPets] = useState<Array<any> | null>();
-  useEffect(() => {
-    const fetchSmoothies = async () => {
-      let { data: pet, error } = await supabase.from("pet").select("*");
+  const {user} = useAuth()
 
+  useEffect(() => {
+    if (user?.id) {
+    const fetchSmoothies = async () => {
+      let { data: pet, error } = await supabase.from("pet").select().eq("userID", user?.id);;
       if (error) {
         setFetchError("Could not fetch the smoothies");
         setPets(null);
@@ -35,7 +38,9 @@ const HomePage: FC = () => {
     };
 
     fetchSmoothies();
-  }, []);
+  }
+  }, [user]);
+
   const handleLoadMore = () => {
     setCurrentPage(currentPage + 1);
   };

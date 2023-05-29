@@ -104,7 +104,7 @@ export const CardCat: FC<Props> = ({ img, id, pet }) => {
           <span>
             <CgShapeHexagonStyled />
           </span>
-          <span className="fw-bold">{t("breedLabel")}{":"}</span> {pet.breed}
+          <span className="fw-bold">{t("breedLabel")}{":"}</span> {pet.breed.label}
         </CardText>
 
         <CardText>
