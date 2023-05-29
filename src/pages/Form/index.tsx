@@ -147,16 +147,14 @@ const Home = () => {
         setFormError("Please fill in all the fields correctly.");
       }
     } else {
-      console.log("petInfo",petInfo)
       const { data, error } = await supabase.from("pet").insert([petInfo]);
-      console.log("data check", data, error)
       if (error) {
         setFormError("Please fill in all the fields correctly.");
       }
     }
 
-    // setFormError(null);
-    // navigate("/");
+    setFormError(null);
+    navigate("/");
   };
 
   return (
