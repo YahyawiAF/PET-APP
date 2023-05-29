@@ -8,7 +8,7 @@
   "colorLabel": "Color",
   "firstVaccinationLabel": "Primera vacuna",
   "editPetInfoButton": "Editar información de la mascota",
-  "notMyPet": "No es mi mascota",
+  "notMyPet": "¿Eres el dueño/a de la mascota?",
   "ownerContactInfo": "Si no eres el propietario de la mascota, por favor proporciona la información de contacto del propietario",
   "dateOfBirthQuestion": "¿Conoces la fecha de nacimiento de la mascota?",
   "dateOfBirth": "Fecha de nacimiento",
@@ -31,5 +31,23 @@
   "email": "Correo electrónico",
   "addOwner": "Agregar Propietario",
   "home": "Hogar",
-  "profile": "Perfil"
+  "profile": "Perfil",
+  "male": "macho",
+  "female": "hembra",
+
+  "formPlaceholders": {
+    "petName": "Ingrese el nombre de la mascota",
+    "phoneNumberEmail": "Ingrese número de teléfono o dirección de correo electrónico",
+    "yearOfBirth": "Ingrese el año de nacimiento de la mascota",
+    "monthOfBirth": "Ingrese el mes de nacimiento de la mascota",
+    "petColor": "Ingrese el color de la mascota"
+  },
+
+  "ProfilePlaceholder": {
+    "firstName": "Ingresa tu nombre",
+    "lastName": "Ingresa tu apellido",
+    "address": "Ingresa tu dirección",
+    "phoneNumber": "Ingresa tu número de teléfono",
+    "email": "Ingresa tu dirección de correo electrónico"
+  }
 }

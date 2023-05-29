@@ -1,14 +1,14 @@
 {
   "yes": "Yes",
   "loadMore": "Load more",
-  "petNameLabel": "Pet Name",
+  "petNameLabel": "Pet's name",
   "breedLabel": "Breed",
   "genderLabel": "Gender",
   "dobLabel": "DOB",
   "colorLabel": "Color",
   "firstVaccinationLabel": "First vaccination",
   "editPetInfoButton": "Edit Pet Info",
-  "notMyPet": "Not my Pet",
+  "notMyPet": "Are you the pet's owner?",
   "ownerContactInfo": "If you are not the pet's owner, please provide owner contact info",
   "dateOfBirthQuestion": "Do you know the pet's date of birth?",
   "dateOfBirth": "Date of birth",
@@ -31,5 +31,23 @@
   "email": "Email",
   "addOwner": "Add Owner",
   "home": "Home",
-  "profile": "Profile"
+  "profile": "Profile",
+  "male": "male",
+  "female": "female",
+
+  "formPlaceholders": {
+    "petName": "Enter pet's name",
+    "phoneNumberEmail": "Enter phone number or email address",
+    "yearOfBirth": "Enter pet's year of birth",
+    "monthOfBirth": "Enter pet's month of birth",
+    "petColor": "Enter pet's color"
+  },
+
+  "ProfilePlaceholder": {
+    "firstName": "Enter your first name",
+    "lastName": "Enter your last name",
+    "address": "Enter your address",
+    "phoneNumber": "Enter your phone number",
+    "email": "Enter your email address"
+  }
 }

@@ -1,4 +1,4 @@
-import { Button, Container, Form, Row } from "react-bootstrap";
+import { Button, Container, Form } from "react-bootstrap";
 import styled from "styled-components";
 import { useEffect, useMemo, useState } from "react";
 import Select, { GroupBase, OptionsOrGroups } from "react-select";
@@ -11,9 +11,9 @@ import { useTranslation } from "react-i18next";
 interface PET {
   name: string;
   breed: string;
-  owner: string;
+  owner: boolean;
   contactInfo: string;
-  dateOfBirth: null;
+  dateOfBirth: string;
   yearOfBirth: string;
   monthOfBirth: string;
   color: string;
@@ -50,22 +50,25 @@ const Home = () => {
   const [petInfo, setPetInfo] = useState<PET>({
     name: "",
     breed: "",
-    owner: "",
+    owner: true,
     contactInfo: "",
-    dateOfBirth: null,
+    dateOfBirth: "",
     yearOfBirth: "",
     monthOfBirth: "",
     color: "",
-    knowsDateOfBirth: false,
-    isFirstVaccination: false,
-    neutering: false,
+    knowsDateOfBirth: true,
+    isFirstVaccination: true,
+    neutering: true,
     vaccinationReaction: false,
-    gender: "",
+    gender: "male",
     sick: false,
     pregnant: false,
 
     // Add more fields as needed
   });
+  console.log(petInfo.owner);
+  console.log(petInfo.gender);
+
   const [formError, setFormError] = useState<string | null>(null);
   const navigate = useNavigate();
 
@@ -122,14 +125,20 @@ const Home = () => {
     }));
   };
 
-  const onchangeChecked = (e: any) => {
-    const { name, value } = e.target;
+  // const onchangeChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const { name, value } = e.target;
+  //   setPetInfo((prevState) => ({
+  //     ...prevState,
+  //     [name]: value === "true" ? true : false,
+  //   }));
+  // };
+
+  const onchangeChecked = (groupName: string, value: string | boolean) => {
     setPetInfo((prevState) => ({
       ...prevState,
-      [name]: value === t("yes") ? true : false,
+      [groupName]: value,
     }));
   };
-
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -150,6 +159,8 @@ const Home = () => {
     navigate("/");
   };
 
+  console.log("selectedBreed", selectedBreed);
+
   return (
     <Wrapper>
       <FormStyled onSubmit={handleSubmit}>
@@ -160,7 +171,7 @@ const Home = () => {
             name="name"
             value={petInfo.name}
             onChange={handleChange}
-            placeholder="Enter pet name"
+            placeholder={t("formPlaceholders.petName")}
             required
           />
         </Form.Group>
@@ -171,22 +182,27 @@ const Home = () => {
             inline
             label={t("yes")}
             name="owner"
-            checked={Boolean(petInfo.owner)}
-            onChange={onchangeChecked}
-            value="yes"
+            id="owner-yes"
+            checked={petInfo.owner === true}
+            onChange={() =>
+              setPetInfo((prevState) => ({ ...prevState, owner: true }))
+            }
             type="radio"
           />
           <Form.Check
-            checked={!Boolean(petInfo.owner)}
             inline
             label="No"
             name="owner"
-            value="no"
+            id="owner-no"
+            checked={petInfo.owner === false}
+            onChange={() =>
+              setPetInfo((prevState) => ({ ...prevState, owner: false }))
+            }
             type="radio"
           />
         </Form.Group>
 
-        {petInfo.owner === "no" && (
+        {!petInfo.owner && (
           <Form.Group className="mb-3" controlId="contactInfo">
             <Label>{t("ownerContactInfo")}</Label>
             <Control
@@ -194,29 +210,72 @@ const Home = () => {
               name="contactInfo"
               value={petInfo.contactInfo}
               onChange={handleChange}
-              placeholder="Enter phone number or email address"
+              placeholder={t("formPlaceholders.phoneNumberEmail")}
             />
           </Form.Group>
         )}
-
         {/* <Form.Group className="mb-3 d-flex flex-column" controlId="hasAccount">
           <Label className="me-4">Pet already has an account</Label>
           <Form.Check
             inline
             label="Yes"
             name="hasAccount"
-            value="yes"
+            value={String(true)}
             type="radio"
           />
           <Form.Check
             inline
             label="No"
             name="hasAccount"
-            value="no"
+            value={String(false)}
             type="radio"
             onChange={handleChange}
           />
         </Form.Group> */}
+
+        <Form.Group className="mb-3" controlId="breed">
+          <Label>{t("breedLabel")}</Label>
+          <Select
+            value={selectedBreed}
+            onChange={handleChangeBreed}
+            placeholder={<div>{t("selectBreed")}</div>}
+            options={options}
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3 d-flex flex-column" controlId="gender">
+          <Label className="me-4">{t("genderQuestion")}</Label>
+          <Form.Check
+            inline
+            label={t("male")}
+            name="gender"
+            id="gender-male"
+            checked={petInfo.gender === "male"}
+            onChange={() => onchangeChecked("gender", "male")}
+            type="radio"
+          />
+          <Form.Check
+            inline
+            label={t("female")}
+            name="gender"
+            id="gender-female"
+            checked={petInfo.gender === "female"}
+            onChange={() => onchangeChecked("gender", "female")}
+            type="radio"
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="color">
+          <Label>{t("colorLabel")}</Label>
+          <Control
+            type="text"
+            name="color"
+            value={petInfo.color}
+            onChange={handleChange}
+            placeholder={t("formPlaceholders.petColor")}
+            required
+          />
+        </Form.Group>
 
         <Form.Group
           className="mb-3 d-flex flex-column"
@@ -225,21 +284,21 @@ const Home = () => {
           <Label className="me-4">{t("dateOfBirthQuestion")}</Label>
           <Form.Check
             inline
-            checked={Boolean(petInfo.knowsDateOfBirth)}
             label={t("yes")}
-            onChange={onchangeChecked}
             name="knowsDateOfBirth"
-            value="yes"
+            id="knowsDateOfBirth-yes"
+            checked={petInfo.knowsDateOfBirth === true}
+            onChange={() => onchangeChecked("knowsDateOfBirth", true)}
             type="radio"
           />
           <Form.Check
             inline
             label="No"
             name="knowsDateOfBirth"
-            checked={!Boolean(petInfo.knowsDateOfBirth)}
-            value="no"
+            id="knowsDateOfBirth-no"
+            checked={petInfo.knowsDateOfBirth === false}
+            onChange={() => onchangeChecked("knowsDateOfBirth", false)}
             type="radio"
-            onChange={onchangeChecked}
           />
         </Form.Group>
 
@@ -252,7 +311,6 @@ const Home = () => {
               value={petInfo.dateOfBirth}
               max={new Date().toISOString().split("T")[0]}
               onChange={handleChange}
-              placeholder="Enter phone number or email address"
             />
           </Form.Group>
         ) : (
@@ -264,7 +322,7 @@ const Home = () => {
                 name="yearOfBirth"
                 value={petInfo.yearOfBirth}
                 onChange={handleChange}
-                placeholder="Enter year of birth"
+                placeholder={t("formPlaceholders.yearOfBirth")}
                 required
               />
             </Form.Group>
@@ -276,34 +334,12 @@ const Home = () => {
                 name="monthOfBirth"
                 value={petInfo.monthOfBirth}
                 onChange={handleChange}
-                placeholder="Enter month of birth"
+                placeholder={t("formPlaceholders.monthOfBirth")}
                 required
               />
             </Form.Group>
           </Container>
         )}
-
-        <Form.Group className="mb-3" controlId="breed">
-          <Label>{t("breedLabel")}</Label>
-          <Select
-            value={selectedBreed}
-            onChange={handleChangeBreed}
-            placeholder={<div>{t("selectBreed")}</div>}
-            options={options}
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="color">
-          <Label>{t("colorLabel")}</Label>
-          <Control
-            type="text"
-            name="color"
-            value={petInfo.color}
-            onChange={handleChange}
-            placeholder="pet's color"
-            required
-          />
-        </Form.Group>
 
         <Form.Group
           className="mb-3 d-flex flex-column"
@@ -313,141 +349,122 @@ const Home = () => {
           <Form.Check
             inline
             label={t("yes")}
-            value="yes"
-            checked={Boolean(petInfo.isFirstVaccination)}
             name="isFirstVaccination"
+            id="isFirstVaccination-yes"
+            checked={petInfo.isFirstVaccination === true}
+            onChange={() => onchangeChecked("isFirstVaccination", true)}
             type="radio"
-            onChange={onchangeChecked}
           />
           <Form.Check
             inline
             label="No"
-            value="no"
             name="isFirstVaccination"
-            checked={!Boolean(petInfo.isFirstVaccination)}
+            id="isFirstVaccination-no"
+            checked={petInfo.isFirstVaccination === false}
+            onChange={() => onchangeChecked("isFirstVaccination", false)}
             type="radio"
-            onChange={onchangeChecked}
           />
         </Form.Group>
+
+        {!petInfo.isFirstVaccination && (
+          <Form.Group
+            className="mb-3 d-flex flex-column"
+            controlId="vaccinationReaction"
+          >
+            <Label className="me-4">{t("vaccineReactionsQuestion")}</Label>
+            <Form.Check
+              inline
+              label={t("yes")}
+              name="vaccinationReaction"
+              id="vaccinationReaction-yes"
+              checked={petInfo.vaccinationReaction === true}
+              onChange={() => onchangeChecked("vaccinationReaction", true)}
+              type="radio"
+            />
+            <Form.Check
+              inline
+              label="No"
+              name="vaccinationReaction"
+              id="vaccinationReaction-no"
+              checked={petInfo.vaccinationReaction === false}
+              onChange={() => onchangeChecked("vaccinationReaction", false)}
+              type="radio"
+            />
+          </Form.Group>
+        )}
 
         <Form.Group className="mb-3 d-flex flex-column" controlId="neutering">
           <Label className="me-4">{t("neuteredQuestion")}</Label>
           <Form.Check
             inline
-            checked={Boolean(petInfo.neutering)}
-            onChange={onchangeChecked}
             label={t("yes")}
-            value="yes"
             name="neutering"
+            id="neutering-yes"
+            checked={petInfo.neutering === true}
+            onChange={() => onchangeChecked("neutering", true)}
             type="radio"
           />
           <Form.Check
             inline
-            checked={!Boolean(petInfo.neutering)}
-            onChange={onchangeChecked}
             label="No"
-            value="no"
             name="neutering"
+            id="neutering-no"
+            checked={petInfo.neutering === false}
+            onChange={() => onchangeChecked("neutering", false)}
             type="radio"
           />
         </Form.Group>
 
-        <Form.Group
-          className="mb-3 d-flex flex-column"
-          controlId="vaccinationReaction"
-        >
-          <Label className="me-4">{t("vaccineReactionsQuestion")}</Label>
-          <Form.Check
-            onChange={onchangeChecked}
-            inline
-            label={t("yes")}
-            value="yes"
-            checked={Boolean(petInfo.vaccinationReaction)}
-            name="vaccinationReaction"
-            type="radio"
-          />
-          <Form.Check
-            onChange={onchangeChecked}
-            inline
-            label="No"
-            value="no"
-            checked={!Boolean(petInfo.vaccinationReaction)}
-            name="vaccinationReaction"
-            type="radio"
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3 d-flex flex-column" controlId="gender">
-          <Label className="me-4">{t("genderQuestion")}</Label>
-          <Form.Check
-            onChange={onchangeChecked}
-            inline
-            label="Male"
-            name="gender"
-            value="Male"
-            checked={petInfo.gender === "Male"}
-            type="radio"
-          />
-          <Form.Check
-            onChange={onchangeChecked}
-            inline
-            label="Female"
-            name="gender"
-            value="Female"
-            checked={petInfo.gender === "Female"}
-            type="radio"
-          />
-        </Form.Group>
+        {!petInfo.neutering && (
+          <Form.Group className="mb-3 d-flex flex-column" controlId="pregnant">
+            <Label className="me-4">{t("pregnantQuestion")}</Label>
+            <Form.Check
+              inline
+              label={t("yes")}
+              name="pregnant"
+              id="pregnant-yes"
+              checked={petInfo.pregnant === true}
+              onChange={() => onchangeChecked("pregnant", true)}
+              type="radio"
+            />
+            <Form.Check
+              inline
+              label="No"
+              name="pregnant"
+              id="pregnant-no"
+              checked={petInfo.pregnant === false}
+              onChange={() => onchangeChecked("pregnant", false)}
+              type="radio"
+            />
+          </Form.Group>
+        )}
 
         <Form.Group className="mb-3 d-flex flex-column" controlId="sick">
           <Label className="me-4">{t("sickQuestion")}</Label>
           <Form.Check
-            checked={Boolean(petInfo.sick)}
-            onChange={onchangeChecked}
             inline
             label={t("yes")}
-            value="yes"
             name="sick"
+            id="sick-yes"
+            checked={petInfo.sick === true}
+            onChange={() => onchangeChecked("sick", true)}
             type="radio"
           />
           <Form.Check
-            checked={!Boolean(petInfo.sick)}
-            onChange={onchangeChecked}
             inline
             label="No"
-            value="no"
             name="sick"
-            type="radio"
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3 d-flex flex-column" controlId="pregnant">
-          <Label className="me-4">{t("pregnantQuestion")}</Label>
-          <Form.Check
-            checked={Boolean(petInfo.pregnant)}
-            onChange={onchangeChecked}
-            inline
-            label={t("yes")}
-            value="yes"
-            name="pregnant"
-            type="radio"
-          />
-          <Form.Check
-            checked={!Boolean(petInfo.pregnant)}
-            onChange={onchangeChecked}
-            inline
-            label="No"
-            value="no"
-            name="pregnant"
+            id="sick-no"
+            checked={petInfo.sick === false}
+            onChange={() => onchangeChecked("sick", false)}
             type="radio"
           />
         </Form.Group>
 
         {/* Add more Form.Group components for additional fields */}
+
         <div className="d-flex justify-content-end">
-          <ButtonS variant="primary" type="submit">
-            {!id ? t("addPet") : t("Edit Pet")}
-          </ButtonS>
+          <ButtonS type="submit">{!id ? t("addPet") : t("Edit Pet")}</ButtonS>
         </div>
         {formError && <p className="error">{formError}</p>}
       </FormStyled>
@@ -470,8 +487,18 @@ const Label = styled(Form.Label)`
 const Control = styled(Form.Control)`
   padding: 14px 10px;
 `;
-const ButtonS = styled(Button)`
-  padding: 8px 40px;
-`;
 
+const ButtonS = styled(Button)`
+  color: white;
+  background: var(--dark);
+  border: 2px solid white;
+  padding: 8px 40px;
+  margin-top: 2rem;
+  transition: 0.4s all;
+  &:hover {
+    border: 2px solid var(--dark);
+    background: white;
+    color: black;
+  }
+`;
 export default Home;
