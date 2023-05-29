@@ -12,7 +12,7 @@ import { useAuth } from "../../context/AuthProvider";
 interface PET {
   name: string;
   breed: {label: string, value: string};
-  owner: string;
+  owner: boolean;
   contactInfo: string;
   dateOfBirth: null;
   yearOfBirth: string;
@@ -21,7 +21,7 @@ interface PET {
   isFirstVaccination: boolean;
   neutering: boolean;
   vaccinationReaction: boolean;
-  gender: string;
+  gender: boolean;
   sick: boolean;
   pregnant: boolean;
   knowsDateOfBirth: boolean;
@@ -53,17 +53,17 @@ const Home = () => {
   const [petInfo, setPetInfo] = useState<PET>({
     name: "",
     breed: {label: "", value: ""},
-    owner: "",
+    owner: true,
     contactInfo: "",
     dateOfBirth: null,
     yearOfBirth: "",
     monthOfBirth: "",
     color: "",
-    knowsDateOfBirth: false,
+    knowsDateOfBirth: true,
     isFirstVaccination: false,
     neutering: false,
     vaccinationReaction: false,
-    gender: "",
+    gender: true,
     sick: false,
     pregnant: false,
     userID: user.id
@@ -141,19 +141,22 @@ const Home = () => {
     e.preventDefault();
     // Handle form submission logic here
     if (id) {
-      const { error } = await supabase.from("pet").update(petInfo).eq("id", id);
+      const { data, error } = await supabase.from("pet").update(petInfo).eq("id", id);
+      console.log("data check", data)
       if (error) {
         setFormError("Please fill in all the fields correctly.");
       }
     } else {
+      console.log("petInfo",petInfo)
       const { data, error } = await supabase.from("pet").insert([petInfo]);
+      console.log("data check", data, error)
       if (error) {
         setFormError("Please fill in all the fields correctly.");
       }
     }
 
-    setFormError(null);
-    navigate("/");
+    // setFormError(null);
+    // navigate("/");
   };
 
   return (
@@ -192,7 +195,7 @@ const Home = () => {
           />
         </Form.Group>
 
-        {petInfo.owner === "no" && (
+        {!petInfo.owner  && (
           <Form.Group className="mb-3" controlId="contactInfo">
             <Label>{t("ownerContactInfo")}</Label>
             <Control
@@ -224,30 +227,7 @@ const Home = () => {
           />
         </Form.Group> */}
 
-        <Form.Group
-          className="mb-3 d-flex flex-column"
-          controlId="knowsDateOfBirth"
-        >
-          <Label className="me-4">{t("dateOfBirthQuestion")}</Label>
-          <Form.Check
-            inline
-            checked={Boolean(petInfo.knowsDateOfBirth)}
-            label={t("yes")}
-            onChange={onchangeChecked}
-            name="knowsDateOfBirth"
-            value="yes"
-            type="radio"
-          />
-          <Form.Check
-            inline
-            label="No"
-            name="knowsDateOfBirth"
-            checked={!Boolean(petInfo.knowsDateOfBirth)}
-            value="no"
-            type="radio"
-            onChange={onchangeChecked}
-          />
-        </Form.Group>
+
 
         {petInfo.knowsDateOfBirth ? (
           <Form.Group className="mb-3" controlId="dateOfBirth">
@@ -288,6 +268,31 @@ const Home = () => {
             </Form.Group>
           </Container>
         )}
+
+<Form.Group
+          className="mb-3 d-flex flex-column"
+          controlId="knowsDateOfBirth"
+        >
+          <Label className="me-4">{t("dateOfBirthQuestion")}</Label>
+          <Form.Check
+            inline
+            checked={Boolean(petInfo.knowsDateOfBirth)}
+            label={t("yes")}
+            onChange={onchangeChecked}
+            name="knowsDateOfBirth"
+            value="yes"
+            type="radio"
+          />
+          <Form.Check
+            inline
+            label="No"
+            name="knowsDateOfBirth"
+            checked={!Boolean(petInfo.knowsDateOfBirth)}
+            value="no"
+            type="radio"
+            onChange={onchangeChecked}
+          />
+        </Form.Group>
 
         <Form.Group className="mb-3" controlId="breed">
           <Label>{t("breedLabel")}</Label>
