@@ -1,7 +1,9 @@
 import { Button, Container, Form } from "react-bootstrap";
 import styled from "styled-components";
 import { useEffect, useMemo, useState } from "react";
-import Select, { GroupBase, OptionsOrGroups } from "react-select";
+import Select from "react-select";
+// import Select, { GroupBase, OptionsOrGroups } from "react-select";
+
 import Breeds from "../../constant/breed.json";
 import supabase from "../../config/supabaseClient";
 import { useNavigate } from "react-router-dom";
@@ -153,6 +155,7 @@ const Home = () => {
       if (error) {
         setFormError("Please fill in all the fields correctly.");
       }
+      console.log("formSubmitData", data);
     }
 
     setFormError(null);
@@ -415,7 +418,7 @@ const Home = () => {
           />
         </Form.Group>
 
-        {!petInfo.neutering && (
+        {petInfo.gender === "female" && !petInfo.neutering ? (
           <Form.Group className="mb-3 d-flex flex-column" controlId="pregnant">
             <Label className="me-4">{t("pregnantQuestion")}</Label>
             <Form.Check
@@ -437,7 +440,7 @@ const Home = () => {
               type="radio"
             />
           </Form.Group>
-        )}
+        ) : null}
 
         <Form.Group className="mb-3 d-flex flex-column" controlId="sick">
           <Label className="me-4">{t("sickQuestion")}</Label>
@@ -492,7 +495,7 @@ const ButtonS = styled(Button)`
   color: white;
   background: var(--dark);
   border: 2px solid white;
-  padding: 8px 40px;
+  padding: 0.5rem 2.5rem;
   margin-top: 2rem;
   transition: 0.4s all;
   &:hover {

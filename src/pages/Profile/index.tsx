@@ -231,7 +231,7 @@ const ButtonS = styled(Button)`
   color: white;
   background: var(--dark);
   border: 2px solid white;
-  padding: 8px 40px;
+  padding: 0.5rem 2.5rem;
   margin-top: 2rem;
   transition: 0.4s all;
   &:hover {
