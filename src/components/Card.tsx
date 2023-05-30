@@ -4,7 +4,7 @@ import Card from "react-bootstrap/Card";
 import { useNavigate } from "react-router-dom";
 import { FiEdit } from "react-icons/fi";
 import { CgShapeHexagon } from "react-icons/cg";
-import Cat from "../assets/cat.jpg";
+// import Cat from "../assets/cat.jpg";
 import { Button } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 
@@ -63,20 +63,20 @@ const ButtonS = styled(Button)`
   }
 `;
 
-const ImageWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-content: center;
-`;
+// const ImageWrapper = styled.div`
+//   width: 100%;
+//   display: flex;
+//   justify-content: center;
+//   align-content: center;
+// `;
 
-const CardImg = styled(Card.Img)`
-  padding: 20px 65px;
-  border-radius: 50%;
-  @media only screen and (max-width: 600px) {
-    width: 50%;
-  }
-`;
+// const CardImg = styled(Card.Img)`
+//   padding: 20px 65px;
+//   border-radius: 50%;
+//   @media only screen and (max-width: 600px) {
+//     width: 50%;
+//   }
+// `;
 
 type Props = {
   img: string;
