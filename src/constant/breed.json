@@ -1,5 +1,15 @@
 [
   {
+    "id": 265,
+    "name": "Other"
+  },
+
+  {
+    "id": 266,
+    "name": "Unknown"
+  },
+
+  {
     "weight": { "imperial": "6 - 13", "metric": "3 - 6" },
     "height": { "imperial": "9 - 11.5", "metric": "23 - 29" },
     "id": 1,

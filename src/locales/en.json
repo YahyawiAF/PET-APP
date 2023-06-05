@@ -1,35 +1,106 @@
 {
   "yes": "Yes",
+
   "loadMore": "Load more",
-  "petNameLabel": "Pet Name",
+
+  "petNameLabel": "Pet's name",
+
   "breedLabel": "Breed",
+
   "genderLabel": "Gender",
+
   "dobLabel": "DOB",
+
   "colorLabel": "Color",
+
   "firstVaccinationLabel": "First vaccination",
+
   "editPetInfoButton": "Edit Pet Info",
-  "notMyPet": "Not my Pet",
-  "ownerContactInfo": "If you are not the pet's owner, please provide owner contact info",
+
+  "notMyPet": "Are you the pet's owner?",
+
+  "ownerName": "Owner's name",
+
+  "ownerNumber": "Owner's phone number",
+
   "dateOfBirthQuestion": "Do you know the pet's date of birth?",
+
   "dateOfBirth": "Date of birth",
-  "yearOfBirth": "Year of birth",
-  "monthOfBirth": "Month of birth",
+
+  "yearOfBirth": "Approximate years",
+
+  "monthOfBirth": "Approximate months",
+
   "selectBreed": "Please select a breed",
+
   "firstVaccinationQuestion": "Is this your pet's first vaccination?",
+
   "neuteredQuestion": "Is your pet neutered / spayed?",
+
   "vaccineReactionsQuestion": "Did your pet have reactions to a vaccine in the past?",
+
   "genderQuestion": "Is your pet male or female?",
+
   "sickQuestion": "Is your pet sick?",
+
   "pregnantQuestion": "Is your pet pregnant?",
+
   "addPet": "Add pet",
 
   "firstName": "First name",
+
   "lastName": "Last name",
+
   "selectGender": "Please select your gender",
+
   "address": "Address",
+
   "phoneNumber": "Phone number",
+
   "email": "Email",
+
   "addOwner": "Add Owner",
+
   "home": "Home",
-  "profile": "Profile"
+
+  "profile": "Profile",
+
+  "male": "male",
+
+  "female": "female",
+
+  "mixedBreed": "Is your pet a mixed breed?",
+
+  "breedName": "What is your pet's breed?",
+
+  "formPlaceholders": {
+    "petName": "Enter pet's name",
+
+    "ownerName": "Enter owner's name",
+
+    "ownerNumber": "Enter owner's phone number",
+
+    "phoneNumberEmail": "Enter phone number or email address",
+
+    "yearOfBirth": "Select years",
+
+    "monthOfBirth": "Select months",
+
+    "petColor": "Enter pet's color",
+
+    "breedName": "Enter your pet's breed"
+  },
+
+  "ProfilePlaceholder": {
+    "firstName": "Enter your first name",
+
+    "lastName": "Enter your last name",
+
+    "address": "Enter your address",
+
+    "phoneNumber": "Enter your phone number",
+
+    "email": "Enter your email address"
+  },
+  "consent": "Do you consent to communication via provided contact methods?"
 }

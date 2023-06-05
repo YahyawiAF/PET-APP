@@ -6,17 +6,16 @@ import { useAuth } from "../../context/AuthProvider";
 import supabase from "../../config/supabaseClient";
 import { useTranslation } from "react-i18next";
 
-
-
 interface PROFILE {
   firstName: string;
   lastName: string;
-  gender: string;
-  dateOfBirth: null;
+  // gender: string;
+  // dateOfBirth: null;
   address: string;
   phoneNumber: string;
   email: string;
-  id?: string
+  id?: string;
+  communicationConsent: boolean;
 }
 
 type SelectOptionType = { label: string; value: string };
@@ -35,21 +34,22 @@ const Wrapper = styled.div`
 const Profile = () => {
   const { t } = useTranslation();
 
-  const {user} = useAuth()
+  const { user } = useAuth();
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [ownerInfo, setOwnerInfo] = useState<PROFILE>({
     firstName: "",
     lastName: "",
-    gender: "",
-    dateOfBirth: null,
+    // gender: "",
+    // dateOfBirth: null,
     address: "",
     phoneNumber: "",
     email: user.email,
+    communicationConsent: false,
   });
 
-  const [selectedGender, setSelectedGender] = useState<SelectOptionType | null>(
-    null
-  );
+  // const [selectedGender, setSelectedGender] = useState<SelectOptionType | null>(
+  //   null
+  // );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -59,11 +59,18 @@ const Profile = () => {
     }));
   };
 
-  const genderOptions: SelectOptionType[] = [
-    { value: "male", label: "Male" },
-    { value: "female", label: "Female" },
-    { value: "other", label: "Other" },
-  ];
+  const handleChangeCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = e.target;
+    setOwnerInfo((prevState) => ({
+      ...prevState,
+      [name]: checked,
+    }));
+  };
+  // const genderOptions: SelectOptionType[] = [
+  //   { value: "male", label: "Male" },
+  //   { value: "female", label: "Female" },
+  //   { value: "other", label: "Other" },
+  // ];
 
   useEffect(() => {
     if (user?.id) {
@@ -77,53 +84,58 @@ const Profile = () => {
           // setPets(null);
         }
         if (profile && profile?.length > 0) {
-          
-          setOwnerInfo(profile[0] as unknown as PROFILE );
+          setOwnerInfo(profile[0] as unknown as PROFILE);
         }
       };
       fetchProfile();
     }
   }, [user]);
 
-  const handleChangeGender = (option: SelectOptionType | null) => {
-    if (option) {
-      setSelectedGender(option);
-      setOwnerInfo((prevState) => ({
-        ...prevState,
-        gender: option.label,
-      }));
-    }
-  };
+  // const handleChangeGender = (option: SelectOptionType | null) => {
+  //   if (option) {
+  //     setSelectedGender(option);
+  //     setOwnerInfo((prevState) => ({
+  //       ...prevState,
+  //       gender: option.label,
+  //     }));
+  //   }
+  // };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Handle form submission logic here
-    if(ownerInfo?.id) {
-      const { error } = await supabase.from("profiles").update(ownerInfo).eq("id", ownerInfo.id);
+    if (ownerInfo?.id) {
+      const { error } = await supabase
+        .from("profiles")
+        .update(ownerInfo)
+        .eq("id", ownerInfo.id);
       if (error) {
         setFetchError("Please fill in all the fields correctly.");
       }
     } else {
-      const { error } = await supabase.from("profiles").insert({...ownerInfo, userID: user.id});
+      const { error } = await supabase
+        .from("profiles")
+        .insert({ ...ownerInfo, userID: user.id });
       if (error) {
         setFetchError("Please fill in all the fields correctly.");
       }
     }
-
   };
+
+  console.log("consent", ownerInfo.communicationConsent);
 
   return (
     <Wrapper>
       <FormStyled onSubmit={handleSubmit}>
-        <ContainerS className="d-flex gap-4 justify-content-between p-0" >
+        <ContainerS className="d-flex gap-4 justify-content-between p-0">
           <Form.Group className="fied-name mb-3" controlId="firstName">
             <Label>{t("firstName")}</Label>
             <Control
               type="text"
               name="firstName"
-              value={ownerInfo.firstName}
+              value={ownerInfo?.firstName ?? ""}
               onChange={handleChange}
-              placeholder="First name"
+              placeholder={t("ProfilePlaceholder.firstName")}
               required
             />
           </Form.Group>
@@ -133,15 +145,15 @@ const Profile = () => {
             <Control
               type="text"
               name="lastName"
-              value={ownerInfo.lastName}
+              value={ownerInfo?.lastName ?? ""}
               onChange={handleChange}
-              placeholder="Last name"
+              placeholder={t("ProfilePlaceholder.lastName")}
               required
             />
           </Form.Group>
         </ContainerS>
 
-        <Form.Group className="mb-3" controlId="gender">
+        {/* <Form.Group className="mb-3" controlId="gender">
           <Label>{t("genderLabel")}</Label>
           <Select
             value={selectedGender}
@@ -149,9 +161,9 @@ const Profile = () => {
             placeholder={<div>{t("selectGender")}</div>}
             options={genderOptions}
           />
-        </Form.Group>
+        </Form.Group> */}
 
-        <Form.Group className="mb-3" controlId="dateOfBirth">
+        {/* <Form.Group className="mb-3" controlId="dateOfBirth">
           <Label>{t("dateOfBirth")}</Label>
           <Control
             type="date"
@@ -160,16 +172,16 @@ const Profile = () => {
             onChange={handleChange}
             required
           />
-        </Form.Group>
+        </Form.Group> */}
 
         <Form.Group className="mb-3" controlId="address">
           <Label>{t("address")}</Label>
           <Control
             type="text"
             name="address"
-            value={ownerInfo.address}
+            value={ownerInfo?.address ?? ""}
             onChange={handleChange}
-            placeholder="Address..."
+            placeholder={t("ProfilePlaceholder.address")}
             required
           />
         </Form.Group>
@@ -179,9 +191,9 @@ const Profile = () => {
           <Control
             type="tel"
             name="phoneNumber"
-            value={ownerInfo.phoneNumber}
+            value={ownerInfo?.phoneNumber ?? ""}
             onChange={handleChange}
-            placeholder="Phone Number"
+            placeholder={t("ProfilePlaceholder.phoneNumber")}
             required
           />
         </Form.Group>
@@ -191,19 +203,36 @@ const Profile = () => {
           <Control
             type="email"
             name="email"
-            value={ownerInfo.email}
+            value={ownerInfo?.email ?? ""}
             onChange={handleChange}
-            placeholder="Email"
+            placeholder={t("ProfilePlaceholder.email")}
             required
+          />
+        </Form.Group>
+
+        <Form.Group
+          className="mb-3 d-flex flex-column"
+          controlId="communicationConsent"
+        >
+          {/* <Label className="me-4">{t("consent")}</Label> */}
+          <Form.Check
+            inline
+            label={t("consent")}
+            name="communicationConsent"
+            checked={ownerInfo.communicationConsent === true}
+            onChange={handleChangeCheckbox}
+            type="checkbox"
           />
         </Form.Group>
 
         {/* Add more Form.Group components for additional fields */}
 
         <div className="d-flex justify-content-end">
-          <ButtonS variant="primary" type="submit">
-          {t("addOwner")}
-          </ButtonS>
+          {ownerInfo.communicationConsent && (
+            <ButtonS variant="primary" type="submit">
+              {t("addOwner")}
+            </ButtonS>
+          )}
         </div>
       </FormStyled>
     </Wrapper>
@@ -226,14 +255,24 @@ const Control = styled(Form.Control)`
   padding: 14px 10px;
 `;
 const ButtonS = styled(Button)`
-  padding: 8px 40px;
+  color: white;
+  background: var(--dark);
+  border: 2px solid white;
+  padding: 0.5rem 2.5rem;
+  margin-top: 2rem;
+  transition: all.4s all;
+  &:hover {
+    border: 2px solid var(--dark);
+    background: white;
+    color: black;
+  }
 `;
 
 const ContainerS = styled(Container)`
- @media only screen and (max-width: 750px) {
-    flex-direction: column; 
+  @media only screen and (max-width: 750px) {
+    flex-direction: column;
     gap: 0;
- }
+  }
 `;
 
 export default Profile;

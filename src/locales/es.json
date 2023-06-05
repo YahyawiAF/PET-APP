@@ -1,35 +1,107 @@
 {
   "yes": "Si",
+
   "loadMore": "Cargar más",
+
   "petNameLabel": "Nombre de la mascota",
+
   "breedLabel": "Raza",
+
   "genderLabel": "Género",
+
   "dobLabel": "Fecha de nacimiento",
+
   "colorLabel": "Color",
+
   "firstVaccinationLabel": "Primera vacuna",
+
   "editPetInfoButton": "Editar información de la mascota",
-  "notMyPet": "No es mi mascota",
-  "ownerContactInfo": "Si no eres el propietario de la mascota, por favor proporciona la información de contacto del propietario",
+
+  "notMyPet": "¿Eres el dueño/a de la mascota?",
+
+  "ownerName": "Nombre del propietario",
+
+  "ownerNumber": "Nùmero de teléfono del propietario",
+
   "dateOfBirthQuestion": "¿Conoces la fecha de nacimiento de la mascota?",
+
   "dateOfBirth": "Fecha de nacimiento",
-  "yearOfBirth": "Año de nacimiento",
-  "monthOfBirth": "Mes de nacimiento",
+
+  "yearOfBirth": "Años aproximados",
+
+  "monthOfBirth": "Meses aproximados",
+
   "selectBreed": "Por favor selecciona una raza",
+
   "firstVaccinationQuestion": "¿Es esta la primera vacuna de tu mascota?",
+
   "neuteredQuestion": "¿Tu mascota está esterilizada / castrada?",
+
   "vaccineReactionsQuestion": "¿Tu mascota ha tenido reacciones a una vacuna en el pasado?",
+
   "genderQuestion": "¿Tu mascota es macho o hembra?",
+
   "sickQuestion": "¿Tu mascota está enferma?",
+
   "pregnantQuestion": "¿Tu mascota está embarazada?",
+
   "addPet": "Agregar mascota",
 
   "firstName": "Nombre",
+
   "lastName": "Apellido",
+
   "selectGender": "Por favor selecciona tu género",
+
   "address": "Dirección",
+
   "phoneNumber": "Número de teléfono",
+
   "email": "Correo electrónico",
+
   "addOwner": "Agregar Propietario",
+
   "home": "Hogar",
-  "profile": "Perfil"
+
+  "profile": "Perfil",
+
+  "male": "macho",
+
+  "female": "hembra",
+
+  "mixedBreed": "¿Tu mascota es de raza mixta?",
+
+  "breedName": "¿Cuál es la raza de tu mascota?",
+
+  "formPlaceholders": {
+    "petName": "Ingrese el nombre de la mascota",
+
+    "ownerName": "Ingrese el Nombre del propietario",
+
+    "ownerNumber": "Ingrese el Nùmero de teléfono del propietario",
+
+    "phoneNumberEmail": "Ingrese número de teléfono o dirección de correo electrónico",
+
+    "yearOfBirth": "Selecciona años",
+
+    "monthOfBirth": "Selecciona meses",
+
+    "petColor": "Ingrese el color de la mascota",
+
+    "breedName": "Ingresa la raza de tu mascota."
+  },
+
+  "ProfilePlaceholder": {
+    "firstName": "Ingresa tu nombre",
+
+    "lastName": "Ingresa tu apellido",
+
+    "address": "Ingresa tu dirección",
+
+    "phoneNumber": "Ingresa tu número de teléfono",
+
+    "email": "Ingresa tu dirección de correo electrónico"
+  },
+
+  "consent": "¿Acepta recibir comunicasiones a través de los métodos de contacto proporcionados?"
 }
