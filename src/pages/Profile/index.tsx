@@ -44,7 +44,7 @@ const Profile = () => {
     dateOfBirth: null,
     address: "",
     phoneNumber: "",
-    email: "",
+    email: user.email,
   });
 
   const [selectedGender, setSelectedGender] = useState<SelectOptionType | null>(
