@@ -9,6 +9,8 @@ import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineAddCircle } from "react-icons/md";
 import { useAuth } from "../../context/AuthProvider";
+import LanguageModal from "../../components/languageModal/LanguageModal";
+import { t } from "i18next";
 
 const LIMIT_PER_PAGE = 10;
 type Breed = {
@@ -21,24 +23,28 @@ const HomePage: FC = () => {
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [pets, setPets] = useState<Array<any> | null>();
-  const {user} = useAuth()
+  const { user } = useAuth();
+  const [showLanguageModal, setShowLanguageModal] = useState(true);
 
   useEffect(() => {
     if (user?.id) {
-    const fetchSmoothies = async () => {
-      let { data: pet, error } = await supabase.from("pet").select().eq("userID", user?.id);;
-      if (error) {
-        setFetchError("Could not fetch the smoothies");
-        setPets(null);
-      }
-      if (pet) {
-        setPets(pet);
-        setFetchError(null);
-      }
-    };
+      const fetchSmoothies = async () => {
+        let { data: pet, error } = await supabase
+          .from("pet")
+          .select()
+          .eq("userID", user?.id);
+        if (error) {
+          setFetchError("Could not fetch the smoothies");
+          setPets(null);
+        }
+        if (pet) {
+          setPets(pet);
+          setFetchError(null);
+        }
+      };
 
-    fetchSmoothies();
-  }
+      fetchSmoothies();
+    }
   }, [user]);
 
   const handleLoadMore = () => {
@@ -52,6 +58,10 @@ const HomePage: FC = () => {
 
   const navigate = useNavigate();
 
+  const handleCloseLanguageModal = () => {
+    setShowLanguageModal(false);
+  };
+
   return (
     <Wrapper className="container">
       <WrapperOption>
@@ -59,7 +69,7 @@ const HomePage: FC = () => {
           <span>
             <MdOutlineAddCircle />
           </span>{" "}
-          <span>Add Pet</span>{" "}
+          <span>{t("addPet")}</span>{" "}
         </ButtonAdd>
       </WrapperOption>
       {pets && pets?.length > 0 ? (
@@ -71,6 +81,10 @@ const HomePage: FC = () => {
       ) : loading ? (
         <Loader />
       ) : null}
+      <LanguageModal
+        show={showLanguageModal}
+        handleClose={handleCloseLanguageModal}
+      />
     </Wrapper>
   );
 };
@@ -83,7 +97,7 @@ const ButtonAdd = styled(Button)`
   border: 2px solid #000;
   color: #000;
   font-size: 21px;
-  line-height:48px;
+  line-height: 48px;
   padding: 0px 15px;
   font-weight: bold;
 
@@ -106,7 +120,7 @@ const ButtonAdd = styled(Button)`
     border: none;
     z-index: 9;
     border-radius: 50%;
-    padding:0;
+    padding: 0;
     &:hover {
       background: none;
       border: none;
@@ -121,10 +135,10 @@ const ButtonAdd = styled(Button)`
         background-color: white;
         border-radius: 50%;
         box-shadow: 0px 0px 7px gray;
-      transition : 0.25s all linear;
+        transition: 0.25s all linear;
         &:hover {
-        background-color: black;
-      }
+          background-color: black;
+        }
       }
     }
 

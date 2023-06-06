@@ -10,11 +10,11 @@ import { ReactComponent as IconPet } from "../assets/pets-svgrepo-com.svg";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-const Topbar = styled.div`
-  padding-block: 10px;
-  box-sizing: border-box;
-  height: 40px;
-`;
+// const Topbar = styled.div`
+//   padding-block: 10px;
+//   box-sizing: border-box;
+//   height: 40px;
+// `;
 
 const Navbar = styled.div`
   position: sticky !important;
@@ -95,8 +95,8 @@ const Header = () => {
   };
 
   return (
-    <header style={{position:"fixed", width:"100%", zIndex:"99"}}>
-      <Topbar className=" bg-dark  d-flex justify-content-end align-items-center ">
+    <header style={{ position: "fixed", width: "100%", zIndex: "99" }}>
+      {/* <Topbar className=" bg-dark  d-flex justify-content-end align-items-center ">
         <div className="container d-flex justify-content-end gap-3">
           <SPicon
             className="navbar-brand d-flex align-items-center"
@@ -107,7 +107,7 @@ const Header = () => {
             onClick={() => changeLanguage("en")}
           />
         </div>
-      </Topbar>
+      </Topbar> */}
       <Navbar className="navbar navbar-dark bg-dark box-shadow">
         <div className="container d-flex justify-content-between">
           <Link to="/home" className="navbar-brand d-flex align-items-center">
@@ -126,7 +126,7 @@ const Header = () => {
             {windowWidth <= 600 ? (
               <MdLogoutStyled onClick={handleSign} />
             ) : (
-              <ButtonStyled onClick={handleSign}>Logout</ButtonStyled>
+              <ButtonStyled onClick={handleSign}>{t("logout")}</ButtonStyled>
             )}
           </RightNavSection>
         </div>
@@ -139,7 +139,7 @@ export const Layout = () => {
   return (
     <LayoutContainer>
       <Header />
-      <div className="flex-grow-1" style={{marginTop:"8rem"}}>
+      <div className="flex-grow-1" style={{ marginTop: "8rem" }}>
         <Outlet />
       </div>
     </LayoutContainer>
