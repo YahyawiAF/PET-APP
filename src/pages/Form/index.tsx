@@ -29,6 +29,8 @@ interface PET {
   knowsDateOfBirth: boolean;
   userID: string;
   mixedBreed: boolean;
+  VaccineTextarea: string;
+  heartwormPrevention: boolean;
 }
 
 type Props = {
@@ -73,6 +75,8 @@ const Home = () => {
     pregnant: false,
     userID: user.id,
     mixedBreed: false,
+    VaccineTextarea: "",
+    heartwormPrevention: false,
 
     // Add more fields as needed
   });
@@ -228,7 +232,7 @@ const Home = () => {
     navigate("/");
   };
 
-  console.log("breed", selectedBreed);
+  // console.log("VaccineTextarea", petInfo.VaccineTextarea);
 
   return (
     <Wrapper>
@@ -471,6 +475,20 @@ const Home = () => {
         </Form.Group>
 
         {!petInfo.isFirstVaccination && (
+          <Form.Group className="mb-3" controlId="VaccineTextarea">
+            <Label>{t("VaccineTextarea")}</Label>
+            <Control
+              type="textarea"
+              name="VaccineTextarea"
+              value={petInfo.VaccineTextarea}
+              onChange={handleChange}
+              placeholder={t("formPlaceholders.VaccineTextarea")}
+              required
+            />
+          </Form.Group>
+        )}
+
+        {!petInfo.isFirstVaccination && (
           <Form.Group
             className="mb-3 d-flex flex-column"
             controlId="vaccinationReaction"
@@ -561,6 +579,41 @@ const Home = () => {
             id="sick-no"
             checked={petInfo.sick === false}
             onChange={() => onchangeChecked("sick", false)}
+            type="radio"
+          />
+        </Form.Group>
+
+        <Form.Group
+          className="mb-3 d-flex flex-column"
+          controlId="heartwormPrevention"
+        >
+          <Label className="me-4">{t("heartwormPrevention")}</Label>
+          <Form.Check
+            inline
+            label={t("yes")}
+            name="heartwormPrevention"
+            id="heartwormPrevention-yes"
+            checked={petInfo.heartwormPrevention === true}
+            onChange={() =>
+              setPetInfo((prevState) => ({
+                ...prevState,
+                heartwormPrevention: true,
+              }))
+            }
+            type="radio"
+          />
+          <Form.Check
+            inline
+            label="No"
+            name="heartwormPrevention"
+            id="heartwormPrevention-no"
+            checked={petInfo.heartwormPrevention === false}
+            onChange={() =>
+              setPetInfo((prevState) => ({
+                ...prevState,
+                heartwormPrevention: false,
+              }))
+            }
             type="radio"
           />
         </Form.Group>
