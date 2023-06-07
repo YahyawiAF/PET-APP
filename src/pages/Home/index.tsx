@@ -24,7 +24,8 @@ const HomePage: FC = () => {
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [pets, setPets] = useState<Array<any> | null>();
   const { user } = useAuth();
-  const [showLanguageModal, setShowLanguageModal] = useState(true);
+  const [showLanguageModal, setShowLanguageModal] = useState(false);
+  const [language, setLanguage] = useState<any | null>();
 
   useEffect(() => {
     if (user?.id) {
@@ -44,6 +45,29 @@ const HomePage: FC = () => {
       };
 
       fetchSmoothies();
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (user?.id) {
+      const fetchLanguage = async () => {
+        let { data: languageDate, error } = await supabase
+          .from("language")
+          .select()
+          .eq("userID", user?.id);
+        if (error || (languageDate && languageDate?.length === 0)) {
+          setFetchError("Could not fetch the smoothies");
+          setLanguage(null);
+          setShowLanguageModal(true);
+        }
+        if (languageDate && languageDate?.length > 0) {
+          setLanguage(languageDate);
+          setShowLanguageModal(false);
+          setFetchError(null);
+        }
+      };
+
+      fetchLanguage();
     }
   }, [user]);
 
@@ -82,6 +106,7 @@ const HomePage: FC = () => {
         <Loader />
       ) : null}
       <LanguageModal
+        language={language}
         show={showLanguageModal}
         handleClose={handleCloseLanguageModal}
       />

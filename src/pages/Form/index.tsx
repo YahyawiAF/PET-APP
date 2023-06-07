@@ -217,7 +217,6 @@ const Home = () => {
         .from("pet")
         .update(petInfo)
         .eq("id", id);
-      console.log("data check", data);
       if (error) {
         setFormError("Please fill in all the fields correctly.");
       }
