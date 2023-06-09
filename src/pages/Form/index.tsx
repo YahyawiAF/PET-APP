@@ -589,8 +589,18 @@ const Label = styled(Form.Label)`
   font-size: 16px;
 `;
 
+// const Control = styled(Form.Control)`
+//   padding: 14px 10px;
+// `;
 const Control = styled(Form.Control)`
   padding: 14px 10px;
+
+  /* &:focus,
+  &:active {
+    outline: none;
+    border-color: transparent;
+    box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.25);
+  } */
 `;
 const ButtonS = styled(Button)`
   color: white;
