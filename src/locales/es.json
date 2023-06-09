@@ -65,6 +65,8 @@
 
   "profile": "Perfil",
 
+  "logout": "Cerrar Sesión",
+
   "male": "macho",
 
   "female": "hembra",
@@ -72,6 +74,10 @@
   "mixedBreed": "¿Tu mascota es de raza mixta?",
 
   "breedName": "¿Cuál es la raza de tu mascota?",
+
+  "VaccineTextarea": "¿Cuándo fue la última vacuna de tu mascota y qué tipo fue?",
+
+  "heartwormPrevention": "¿Tu mascota está recibiendo prevención para le enfermedad del gusano del corazón?",
 
   "formPlaceholders": {
     "petName": "Ingrese el nombre de la mascota",
@@ -88,7 +94,9 @@
 
     "petColor": "Ingrese el color de la mascota",
 
-    "breedName": "Ingresa la raza de tu mascota."
+    "breedName": "Ingresa la raza de tu mascota",
+
+    "VaccineTextarea": "Fecha aproximada y tipo de vacuna recibida"
   },
 
   "ProfilePlaceholder": {

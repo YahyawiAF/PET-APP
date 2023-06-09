@@ -122,8 +122,6 @@ const Profile = () => {
     }
   };
 
-  console.log("consent", ownerInfo.communicationConsent);
-
   return (
     <Wrapper>
       <FormStyled onSubmit={handleSubmit}>

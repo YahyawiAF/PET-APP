@@ -65,6 +65,8 @@
 
   "profile": "Profile",
 
+  "logout": "Logout",
+
   "male": "male",
 
   "female": "female",
@@ -72,6 +74,10 @@
   "mixedBreed": "Is your pet a mixed breed?",
 
   "breedName": "What is your pet's breed?",
+
+  "VaccineTextarea": "When was your pet last vaccine and what type was it?",
+
+  "heartwormPrevention": "Is your pet on heartworm prevention?",
 
   "formPlaceholders": {
     "petName": "Enter pet's name",
@@ -88,7 +94,9 @@
 
     "petColor": "Enter pet's color",
 
-    "breedName": "Enter your pet's breed"
+    "breedName": "Enter your pet's breed",
+
+    "VaccineTextarea": "Approximate date and type of vaccine"
   },
 
   "ProfilePlaceholder": {

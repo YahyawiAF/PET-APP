@@ -28,11 +28,11 @@ select.form-control:active,
 input.form-check-input:focus,
 input.form-check-input:active {
   outline: none;
-  border-color: transparent;
+  border-color: gray;
   box-shadow: 0 0 0 0.2rem #00000040;
 }
 
 input.form-check-input:checked {
-  background-color: #000000ae;
+  background-color: #00000052;
   border-color: #00000040;
 }
