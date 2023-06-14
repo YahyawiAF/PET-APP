@@ -103,7 +103,7 @@ const Login = () => {
               supabaseClient={supabase}
               appearance={{ theme: ThemeSupa }}
               magicLink
-              providers={["google", "apple"]}
+              providers={[]}
             />
             <Button
               onClick={() => setLogin(!changeLogin)}

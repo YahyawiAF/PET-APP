@@ -12,6 +12,7 @@ import Home from "../pages/Home";
 import Form from "../pages/Form";
 import Profile from "../pages/Profile";
 import Validate from "../pages/Validate";
+import CheckIn from "../pages/CheckIn";
 
 function RouteSection() {
   const { session } = useAuth();
@@ -32,6 +33,7 @@ function RouteSection() {
         <Route path="/form/:id" element={<Form />} />
         <Route path="/home" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/check-in" element={<CheckIn />} />
       </Route>
     </Routes>
   );

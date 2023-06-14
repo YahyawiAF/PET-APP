@@ -1,6 +1,16 @@
 {
   "yes": "Si",
 
+  "checkIn": "Lista de registro",
+
+  "checkInButton": "Solicitar Registro",
+
+  "species": "Por favor, elige la especie de tu mascota",
+
+  "species2": "Especie",
+
+  "confirm": "Confirmar",
+
   "loadMore": "Cargar más",
 
   "petNameLabel": "Nombre de la mascota",
@@ -79,6 +89,12 @@
 
   "heartwormPrevention": "¿Tu mascota está recibiendo prevención para le enfermedad del gusano del corazón?",
 
+  "city": "Ciudad",
+
+  "state": "Estado/Provincia",
+
+  "zipCode": "Código Postal",
+
   "formPlaceholders": {
     "petName": "Ingrese el nombre de la mascota",
 
@@ -108,7 +124,13 @@
 
     "phoneNumber": "Ingresa tu número de teléfono",
 
-    "email": "Ingresa tu dirección de correo electrónico"
+    "email": "Ingresa tu dirección de correo electrónico",
+
+    "city": "Ingrese la Ciudad",
+
+    "state": "Ingrese el estado",
+
+    "zipCode": "Ingrese el Código Postal"
   },
 
   "consent": "¿Acepta recibir comunicasiones a través de los métodos de contacto proporcionados?"

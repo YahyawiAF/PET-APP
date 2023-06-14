@@ -43,6 +43,9 @@ const LinkStyled = styled(Link)`
   &:hover {
     color: gray;
   }
+  @media only screen and (max-width: 600px) {
+    font-size: 16px;
+  }
 `;
 
 const ButtonStyled = styled(Button)`
@@ -61,6 +64,9 @@ const RightNavSection = styled.div`
   justify-content: center;
   align-items: center;
   gap: 20px;
+  @media only screen and (max-width: 600px) {
+    gap: 15px;
+  }
 `;
 
 const Header = () => {
@@ -123,6 +129,7 @@ const Header = () => {
           <RightNavSection>
             <LinkStyled to="/home">{t("home")}</LinkStyled>
             <LinkStyled to="/profile">{t("profile")}</LinkStyled>
+            <LinkStyled to="/check-in">{t("checkIn")}</LinkStyled>
             {windowWidth <= 600 ? (
               <MdLogoutStyled onClick={handleSign} />
             ) : (

@@ -1,21 +1,23 @@
 import { useEffect, useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
-import Select, { GroupBase, OptionsOrGroups } from "react-select";
 import styled from "styled-components";
 import { useAuth } from "../../context/AuthProvider";
 import supabase from "../../config/supabaseClient";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 interface PROFILE {
   firstName: string;
   lastName: string;
-  // gender: string;
-  // dateOfBirth: null;
   address: string;
   phoneNumber: string;
   email: string;
   id?: string;
   communicationConsent: boolean;
+  city: string;
+  state: string;
+  zipCode: string;
 }
 
 type SelectOptionType = { label: string; value: string };
@@ -33,23 +35,21 @@ const Wrapper = styled.div`
 
 const Profile = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const { user } = useAuth();
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [ownerInfo, setOwnerInfo] = useState<PROFILE>({
     firstName: "",
     lastName: "",
-    // gender: "",
-    // dateOfBirth: null,
     address: "",
     phoneNumber: "",
     email: user.email,
     communicationConsent: false,
+    city: "",
+    state: "",
+    zipCode: "",
   });
-
-  // const [selectedGender, setSelectedGender] = useState<SelectOptionType | null>(
-  //   null
-  // );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -66,11 +66,6 @@ const Profile = () => {
       [name]: checked,
     }));
   };
-  // const genderOptions: SelectOptionType[] = [
-  //   { value: "male", label: "Male" },
-  //   { value: "female", label: "Female" },
-  //   { value: "other", label: "Other" },
-  // ];
 
   useEffect(() => {
     if (user?.id) {
@@ -80,9 +75,13 @@ const Profile = () => {
           .select()
           .eq("userID", user?.id);
         if (error) {
-          setFetchError("Could not fetch the smoothies");
-          // setPets(null);
+          setFetchError("Could not fetch the profile");
+
+          toast.error("Could not fetch the profile", {
+            autoClose: 2000,
+          });
         }
+
         if (profile && profile?.length > 0) {
           setOwnerInfo(profile[0] as unknown as PROFILE);
         }
@@ -90,16 +89,6 @@ const Profile = () => {
       fetchProfile();
     }
   }, [user]);
-
-  // const handleChangeGender = (option: SelectOptionType | null) => {
-  //   if (option) {
-  //     setSelectedGender(option);
-  //     setOwnerInfo((prevState) => ({
-  //       ...prevState,
-  //       gender: option.label,
-  //     }));
-  //   }
-  // };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -111,13 +100,20 @@ const Profile = () => {
         .eq("id", ownerInfo.id);
       if (error) {
         setFetchError("Please fill in all the fields correctly.");
+        toast.error("Please fill in all the fields correctly.", {
+          autoClose: 2000,
+        });
       }
     } else {
       const { error } = await supabase
         .from("profiles")
         .insert({ ...ownerInfo, userID: user.id });
+      navigate("/form");
       if (error) {
         setFetchError("Please fill in all the fields correctly.");
+        toast.error("Please fill in all the fields correctly.", {
+          autoClose: 2000,
+        });
       }
     }
   };
@@ -126,7 +122,7 @@ const Profile = () => {
     <Wrapper>
       <FormStyled onSubmit={handleSubmit}>
         <ContainerS className="d-flex gap-4 justify-content-between p-0">
-          <Form.Group className="fied-name mb-3" controlId="firstName">
+          <Form.Group className="fied-name mb-3 w-100" controlId="firstName">
             <Label>{t("firstName")}</Label>
             <Control
               type="text"
@@ -138,7 +134,7 @@ const Profile = () => {
             />
           </Form.Group>
 
-          <Form.Group className="fied-name mb-3" controlId="lastName">
+          <Form.Group className="fied-name mb-3 w-100" controlId="lastName">
             <Label>{t("lastName")}</Label>
             <Control
               type="text"
@@ -151,27 +147,6 @@ const Profile = () => {
           </Form.Group>
         </ContainerS>
 
-        {/* <Form.Group className="mb-3" controlId="gender">
-          <Label>{t("genderLabel")}</Label>
-          <Select
-            value={selectedGender}
-            onChange={handleChangeGender}
-            placeholder={<div>{t("selectGender")}</div>}
-            options={genderOptions}
-          />
-        </Form.Group> */}
-
-        {/* <Form.Group className="mb-3" controlId="dateOfBirth">
-          <Label>{t("dateOfBirth")}</Label>
-          <Control
-            type="date"
-            name="dateOfBirth"
-            value={ownerInfo.dateOfBirth}
-            onChange={handleChange}
-            required
-          />
-        </Form.Group> */}
-
         <Form.Group className="mb-3" controlId="address">
           <Label>{t("address")}</Label>
           <Control
@@ -183,30 +158,69 @@ const Profile = () => {
             required
           />
         </Form.Group>
+        <ContainerS className="d-flex gap-4 justify-content-between p-0">
+          <Form.Group className="mb-3" controlId="city">
+            <Label>{t("city")}</Label>
+            <Control
+              type="text"
+              name="city"
+              value={ownerInfo?.city ?? ""}
+              onChange={handleChange}
+              placeholder={t("ProfilePlaceholder.city")}
+              required
+            />
+          </Form.Group>
 
-        <Form.Group className="mb-3" controlId="phoneNumber">
-          <Label>{t("phoneNumber")}</Label>
-          <Control
-            type="tel"
-            name="phoneNumber"
-            value={ownerInfo?.phoneNumber ?? ""}
-            onChange={handleChange}
-            placeholder={t("ProfilePlaceholder.phoneNumber")}
-            required
-          />
-        </Form.Group>
+          <Form.Group className="mb-3" controlId="state">
+            <Label>{t("state")}</Label>
+            <Control
+              type="text"
+              name="state"
+              value={ownerInfo?.state ?? "TX"}
+              onChange={handleChange}
+              placeholder={t("ProfilePlaceholder.state")}
+              required
+            />
+          </Form.Group>
 
-        <Form.Group className="mb-3" controlId="email">
-          <Label>{t("email")}</Label>
-          <Control
-            type="email"
-            name="email"
-            value={ownerInfo?.email ?? ""}
-            onChange={handleChange}
-            placeholder={t("ProfilePlaceholder.email")}
-            required
-          />
-        </Form.Group>
+          <Form.Group className="mb-3" controlId="zipCode">
+            <Label>{t("zipCode")}</Label>
+            <Control
+              type="text"
+              name="zipCode"
+              value={ownerInfo?.zipCode ?? ""}
+              onChange={handleChange}
+              placeholder={t("ProfilePlaceholder.zipCode")}
+              required
+            />
+          </Form.Group>
+        </ContainerS>
+
+        <ContainerS className="d-flex gap-4 justify-content-between p-0">
+          <Form.Group className="mb-3 w-100" controlId="phoneNumber">
+            <Label>{t("phoneNumber")}</Label>
+            <Control
+              type="tel"
+              name="phoneNumber"
+              value={ownerInfo?.phoneNumber ?? ""}
+              onChange={handleChange}
+              placeholder={t("ProfilePlaceholder.phoneNumber")}
+              required
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3 w-100" controlId="email">
+            <Label>{t("email")}</Label>
+            <Control
+              type="email"
+              name="email"
+              value={ownerInfo?.email ?? ""}
+              onChange={handleChange}
+              placeholder={t("ProfilePlaceholder.email")}
+              required
+            />
+          </Form.Group>
+        </ContainerS>
 
         <Form.Group
           className="mb-3 d-flex flex-column"
@@ -256,8 +270,6 @@ const ButtonS = styled(Button)`
   color: white;
   background: var(--dark);
   border: 2px solid white;
-  padding: 0.5rem 2.5rem;
-  margin-top: 2rem;
   transition: all.4s all;
   &:hover {
     border: 2px solid var(--dark);
@@ -267,9 +279,10 @@ const ButtonS = styled(Button)`
 `;
 
 const ContainerS = styled(Container)`
-  @media only screen and (max-width: 750px) {
+  max-width: unset;
+  @media only screen and (max-width: 600px) {
     flex-direction: column;
-    gap: 0;
+    gap: 0 !important;
   }
 `;
 

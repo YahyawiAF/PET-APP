@@ -1,6 +1,16 @@
 {
   "yes": "Yes",
 
+  "checkIn": "Check-in",
+
+  "checkInButton": "Request Check-In",
+
+  "species": "Please choose your pet's species",
+
+  "species2": "Species",
+
+  "confirm": "Confirm",
+
   "loadMore": "Load more",
 
   "petNameLabel": "Pet's name",
@@ -79,6 +89,12 @@
 
   "heartwormPrevention": "Is your pet on heartworm prevention?",
 
+  "city": "City",
+
+  "state": "State/Province",
+
+  "zipCode": "Zip/Postal Code",
+
   "formPlaceholders": {
     "petName": "Enter pet's name",
 
@@ -108,7 +124,13 @@
 
     "phoneNumber": "Enter your phone number",
 
-    "email": "Enter your email address"
+    "email": "Enter your email address",
+
+    "city": "Enter city",
+
+    "state": "Enter state",
+
+    "zipCode": "Enter postal code"
   },
   "consent": "Do you consent to communication via provided contact methods?"
 }
