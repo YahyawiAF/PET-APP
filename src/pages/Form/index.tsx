@@ -146,9 +146,6 @@ const Home = () => {
     return yobOptions;
   };
 
-  console.log("selectedYOB", selectedYOB);
-  console.log("selectedMOB", selectedMOB);
-
   const handleChangeYOB = (option: SelectOptionType | null) => {
     if (option) {
       setSelectedYOB(option);
@@ -265,6 +262,14 @@ const Home = () => {
   };
 
   const onchangeChecked = (groupName: string, value: string | boolean) => {
+    if (groupName === "knowsDateOfBirth") {
+      if (value) {
+        setSelectedYOB(null);
+        setSelectedMOB(null);
+      } else {
+        setPetInfo((prev) => ({ ...prev, dateOfBirth: "" }));
+      }
+    }
     setPetInfo((prevState) => ({
       ...prevState,
       [groupName]: value,
@@ -273,7 +278,6 @@ const Home = () => {
 
   const handleSubmitSpecies = async (e: any) => {
     e.preventDefault();
-
     console.log("SPECIES: ", petInfo.species);
   };
 

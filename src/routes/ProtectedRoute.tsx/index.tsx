@@ -5,24 +5,24 @@ export const ProtectedRoute = ({
   children,
   session,
 }: {
-    session: any;
-    children?: ReactNode;
+  session: any;
+  children?: ReactNode;
 }): JSX.Element => {
   if (!session) {
     return <Navigate to="/" />;
   }
-  return children ? <>{children}</> : <Outlet />
+  return children ? <>{children}</> : <Outlet />;
 };
 
 export const PublicRoute = ({
-    children,
-    session,
-  }: {
-      session: any;
-      children?: ReactNode;
-  }): JSX.Element => {
-    if (session) {
-      return <Navigate to="/home" />;
-    }
-    return children ? <>{children}</> : <Outlet />
-  };
+  children,
+  session,
+}: {
+  session: any;
+  children?: ReactNode;
+}): JSX.Element => {
+  if (session) {
+    return <Navigate to="/home" />;
+  }
+  return children ? <>{children}</> : <Outlet />;
+};
