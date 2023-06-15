@@ -12,15 +12,22 @@ interface FormData {
 const Validate = () => {
   let { id } = useParams();
   const [loading, setLoading] = useState(false);
-  const { setUser, setSession } = useAuth();
+  const { setUser, setSession, session } = useAuth();
 
   const navigate = useNavigate();
+
   console.log("code", id);
 
   const [formData, setFormData] = useState<FormData>({
     phone: "",
     // Initialize other form field properties
   });
+
+  useEffect(() => {
+    if (session) {
+      navigate("/home");
+    }
+  }, [session]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -46,7 +53,7 @@ const Validate = () => {
         if (data) {
           setSession(data as unknown as Session);
           setUser(data.user);
-          redirect("/");
+          navigate("/home");
         }
       }
     } catch (error) {
