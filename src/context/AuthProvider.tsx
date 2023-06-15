@@ -1,6 +1,8 @@
 import {
+  Dispatch,
   FC,
   ReactNode,
+  SetStateAction,
   createContext,
   useContext,
   useEffect,
@@ -15,6 +17,8 @@ interface AppContextInterface {
   logIn: (data: any) => Promise<AuthResponse>;
   signOut: () => void;
   session: Session | null;
+  setSession: Dispatch<SetStateAction<Session | null>>;
+  setUser: Dispatch<any>;
 }
 
 export const AuthContext = createContext<AppContextInterface>(
@@ -30,21 +34,19 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
-
   useEffect(() => {
     let gotSession = localStorage.getItem("authSession");
     if (gotSession) {
       setSession(JSON.parse(gotSession));
       setUser(JSON.parse(gotSession));
     }
-    
+
     async function getSession() {
       setLoading(false);
       const {
         data: { subscription },
       } = supabase.auth.onAuthStateChange(async (event, session) => {
         if (session) {
-         
           setUser(session.user);
           localStorage.setItem("authSession", JSON.stringify(session));
           setSession(session);
@@ -68,6 +70,8 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     logIn: (data: any) => supabase.auth.signInWithPassword(data),
     signOut: () => supabase.auth.signOut(),
     user,
+    setUser,
+    setSession,
   };
 
   return (

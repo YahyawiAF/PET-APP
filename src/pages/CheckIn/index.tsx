@@ -99,7 +99,7 @@ const CheckIn = () => {
   const { user } = useAuth();
 
   const [petCheckIn, setPetCheckIn] = useState<Array<number>>([]);
-
+  const [ID, setID] = useState<string>("");
   const [moreInfo, setMoreInfo] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [fetchError, setFetchError] = useState<string | null>(null);
@@ -117,6 +117,18 @@ const CheckIn = () => {
   useEffect(() => {
     if (user?.id) {
       const fetchSmoothies = async () => {
+        let { data: checkinlist, error: errorList } = await supabase
+          .from("checkInList")
+          .select()
+          .eq("userID", user?.id);
+
+        if (checkinlist && checkinlist.length > 0) {
+          setPetCheckIn(checkinlist[0]?.list);
+          setID(checkinlist[0]?.id);
+        }
+
+        console.log("checkinlist", checkinlist);
+
         let { data: pet, error } = await supabase
           .from("pet")
           .select()
@@ -137,9 +149,16 @@ const CheckIn = () => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     // Handle form submission logic here
-    const { error } = await supabase
-      .from("checkInList")
-      .insert({ list: petCheckIn, userID: user.id });
+    if (ID) {
+      const { error } = await supabase
+        .from("checkInList")
+        .update({ list: petCheckIn, userID: user.id })
+        .eq("id", ID);
+    } else {
+      const { error } = await supabase
+        .from("checkInList")
+        .insert({ list: petCheckIn, userID: user.id });
+    }
   };
 
   return (

@@ -8,6 +8,7 @@ type Props = {
   pets: any[];
   onLoadMore: () => void;
   canLoadMore: boolean;
+  handleDelete: (id: string) => Promise<void>;
 };
 
 const LoadMoreButton = styled.button`
@@ -15,7 +16,12 @@ const LoadMoreButton = styled.button`
   display: block;
 `;
 
-export const CardList: FC<Props> = ({ pets, onLoadMore, canLoadMore }) => {
+export const CardList: FC<Props> = ({
+  pets,
+  onLoadMore,
+  canLoadMore,
+  handleDelete,
+}) => {
   const { t } = useTranslation();
 
   return (
@@ -24,7 +30,13 @@ export const CardList: FC<Props> = ({ pets, onLoadMore, canLoadMore }) => {
         <div className="row">
           {pets.map((pet) => (
             <Col key={pet.id} md={4} lg={3} xl={3}>
-              <CardCat key={pet.id} pet={pet} img={pet.url} id={pet.id} />
+              <CardCat
+                key={pet.id}
+                pet={pet}
+                img={pet.url}
+                id={pet.id}
+                handleDelete={handleDelete}
+              />
             </Col>
           ))}
           {canLoadMore && (

@@ -4,10 +4,12 @@ import Card from "react-bootstrap/Card";
 import { useNavigate } from "react-router-dom";
 import { FiEdit } from "react-icons/fi";
 import { CgShapeHexagon } from "react-icons/cg";
+import { AiOutlineDelete } from "react-icons/ai";
+
 import Cat from "../assets/cat.jpg";
 import { Button } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-
+import supabase from "../config/supabaseClient";
 
 const CardStyled = styled(Card)`
   border-radius: 0;
@@ -72,9 +74,9 @@ const ImageWrapper = styled.div`
 `;
 
 const CardImg = styled(Card.Img)`
-  padding: 20px 65px ;
+  padding: 20px 65px;
   border-radius: 50%;
-  @media only screen and (max-width : 600px) {
+  @media only screen and (max-width: 600px) {
     width: 50%;
   }
 `;
@@ -83,9 +85,10 @@ type Props = {
   img: string;
   id: string;
   pet: any;
+  handleDelete: (id: string) => Promise<void>;
 };
 
-export const CardCat: FC<Props> = ({ img, id, pet }) => {
+export const CardCat: FC<Props> = ({ img, id, pet, handleDelete }) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -96,7 +99,11 @@ export const CardCat: FC<Props> = ({ img, id, pet }) => {
       </ImageWrapper> */}
       <Card.Body>
         <CardTitle className="d-flex gap-2">
-          <span className="fw-bold">{t("petNameLabel")}{":"}</span> {pet.name}
+          <span className="fw-bold">
+            {t("petNameLabel")}
+            {":"}
+          </span>{" "}
+          {pet.name}
         </CardTitle>
 
         {/* <Card.Subtitle className="mb-2 text-muted">{pet.}</Card.Subtitle> */}
@@ -104,35 +111,54 @@ export const CardCat: FC<Props> = ({ img, id, pet }) => {
           <span>
             <CgShapeHexagonStyled />
           </span>
-          <span className="fw-bold">{t("breedLabel")}{":"}</span> {pet.breed.label}
+          <span className="fw-bold">
+            {t("breedLabel")}
+            {":"}
+          </span>{" "}
+          {pet.breed.label}
         </CardText>
 
         <CardText>
           <span>
             <CgShapeHexagonStyled />
           </span>
-          <span className="fw-bold">{t("genderLabel")}{":"}</span> {pet.gender}
+          <span className="fw-bold">
+            {t("genderLabel")}
+            {":"}
+          </span>{" "}
+          {pet.gender}
         </CardText>
 
         <CardText>
           <span>
             <CgShapeHexagonStyled />
           </span>
-          <span className="fw-bold">{t("dobLabel")}{":"}</span> {pet.dateOfBirth}
+          <span className="fw-bold">
+            {t("dobLabel")}
+            {":"}
+          </span>{" "}
+          {pet.dateOfBirth}
         </CardText>
 
         <CardText>
           <span>
             <CgShapeHexagonStyled />
           </span>
-          <span className="fw-bold">{t("colorLabel")}{":"}</span> {pet.color}
+          <span className="fw-bold">
+            {t("colorLabel")}
+            {":"}
+          </span>{" "}
+          {pet.color}
         </CardText>
 
         <CardText>
           <span>
             <CgShapeHexagonStyled />
           </span>
-          <span className="fw-bold">{t("firstVaccinationLabel")}{":"}</span>{" "}
+          <span className="fw-bold">
+            {t("firstVaccinationLabel")}
+            {":"}
+          </span>{" "}
           {pet.isFirstVaccination ? "Yes" : "No"}
         </CardText>
 
@@ -173,6 +199,9 @@ export const CardCat: FC<Props> = ({ img, id, pet }) => {
         </CardText> */}
         <ButtonS onClick={() => navigate(`/form/${pet.id}`)}>
           {t("editPetInfoButton")}
+        </ButtonS>
+        <ButtonS onClick={() => handleDelete(pet.id)}>
+          <AiOutlineDelete color="white" />
         </ButtonS>
       </Card.Body>
     </CardStyled>

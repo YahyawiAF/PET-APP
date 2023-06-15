@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
 //import { useCatAPI } from "../contexts";
 // import BreedSelector from "../../components/BreedSelector";
 import { CardList } from "../../components/CardList";
@@ -27,26 +27,31 @@ const HomePage: FC = () => {
   const [showLanguageModal, setShowLanguageModal] = useState(false);
   const [language, setLanguage] = useState<any | null>();
 
+  const fetchSmoothies = useCallback(async () => {
+    let { data: pet, error } = await supabase
+      .from("pet")
+      .select()
+      .eq("userID", user?.id);
+    if (error) {
+      setFetchError("Could not fetch the smoothies");
+      setPets(null);
+    }
+    if (pet) {
+      setPets(pet);
+      setFetchError(null);
+    }
+  }, [user, supabase]);
+
   useEffect(() => {
     if (user?.id) {
-      const fetchSmoothies = async () => {
-        let { data: pet, error } = await supabase
-          .from("pet")
-          .select()
-          .eq("userID", user?.id);
-        if (error) {
-          setFetchError("Could not fetch the smoothies");
-          setPets(null);
-        }
-        if (pet) {
-          setPets(pet);
-          setFetchError(null);
-        }
-      };
-
       fetchSmoothies();
     }
-  }, [user]);
+  }, [user, fetchSmoothies]);
+
+  const handleDelete = async (id: string) => {
+    const { data, error } = await supabase.from("pet").delete().eq("id", id);
+    fetchSmoothies();
+  };
 
   useEffect(() => {
     if (user?.id) {
@@ -100,6 +105,7 @@ const HomePage: FC = () => {
         <CardList
           pets={pets}
           onLoadMore={handleLoadMore}
+          handleDelete={handleDelete}
           canLoadMore={canLoadMore}
         />
       ) : loading ? (

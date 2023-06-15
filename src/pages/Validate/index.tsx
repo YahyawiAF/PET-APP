@@ -1,9 +1,10 @@
 import { useEffect, useState, ChangeEvent, FormEvent } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { redirect, useNavigate, useParams } from "react-router-dom";
 import supabaseClient from "../../config/supabaseClient";
 import { Button, Form } from "react-bootstrap";
 import { Phone } from "react-bootstrap-icons";
-
+import { useAuth } from "../../context/AuthProvider";
+import { Session } from "@supabase/supabase-js";
 interface FormData {
   phone: string;
 }
@@ -11,6 +12,7 @@ interface FormData {
 const Validate = () => {
   let { id } = useParams();
   const [loading, setLoading] = useState(false);
+  const { setUser, setSession } = useAuth();
 
   const navigate = useNavigate();
   console.log("code", id);
@@ -27,45 +29,13 @@ const Validate = () => {
     });
   };
 
-  //   useEffect(() => {
-  //     const fetchAPI = async (id: string) => {
-  //       const { data: user, error } = await supabaseClient.auth.verifyOtp({
-  //         phone: "+18179754152",
-  //         token: id,
-  //         type: "sms",
-  //         options: {
-  //           redirectTo: "https://pet-app-olive.vercel.app/home",
-  //         },
-  //       });
-  //       if (error) {
-  //         navigate("/");
-  //         return {
-  //           success: false,
-  //           error,
-  //         };
-  //       }
-  //       if (user) {
-  //         navigate("/home");
-  //         return {
-  //           success: true,
-  //           redirectTo: "/home",
-  //         };
-  //       }
-  //     };
-  //     if (id) fetchAPI(id);
-  //   }, [id]);
-
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
       setLoading(true);
-      // if (!/^\+[1-9]{1}[0-9]{3,14}$/.test(formData.phone)) {
-      //   setError("Please enter a valid mobile number");
-      //   return;
-      // }
       if (id) {
-        const { data: user, error } = await supabaseClient.auth.verifyOtp({
+        const { data, error } = await supabaseClient.auth.verifyOtp({
           phone: formData.phone,
           token: id,
           type: "sms",
@@ -73,8 +43,12 @@ const Validate = () => {
             redirectTo: "https://pet-app-olive.vercel.app/home",
           },
         });
+        if (data) {
+          setSession(data as unknown as Session);
+          setUser(data.user);
+          redirect("/");
+        }
       }
-      // alert('Check your email for the login link!')
     } catch (error) {
       console.log("error", error);
       // alert(error?.error_description || error?.message)

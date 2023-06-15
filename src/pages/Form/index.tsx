@@ -11,7 +11,7 @@ import { useAuth } from "../../context/AuthProvider";
 import { useBreed } from "../../context/breedContext";
 import CAT from "../../assets/cat.png";
 import DOG from "../../assets/dog.png";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { IoMdArrowRoundBack } from "react-icons/io";
 
 enum SPECIES {
@@ -59,6 +59,30 @@ const Wrapper = styled.div`
     padding: 10px;
   }
 `;
+
+const calculateDateOfBirth = (years: number, months: number) => {
+  var currentDate = new Date();
+
+  // var years = 2;
+  // var months = 2;
+
+  var birthDate = new Date();
+  birthDate.setFullYear(currentDate.getFullYear() - years);
+  birthDate.setMonth(currentDate.getMonth() - months);
+
+  var maxDay = new Date(
+    birthDate.getFullYear(),
+    birthDate.getMonth() + 1,
+    0
+  ).getDate();
+  var randomDay = Math.floor(Math.random() * maxDay) + 1;
+
+  birthDate.setDate(randomDay);
+
+  var formattedDateOfBirth = birthDate.toISOString().split("T")[0];
+
+  return formattedDateOfBirth;
+};
 
 const Home = () => {
   const { t, i18n } = useTranslation();
@@ -109,8 +133,8 @@ const Home = () => {
 
   const yobRenderOptions = (): SelectOptionType[] => {
     const yobOptions: SelectOptionType[] = [
-      { label: "Less than one year", value: "lessThanOneYear" },
-      { label: "20 years or above", value: "twentyYearsOrAbove" },
+      { label: "Less than one year", value: "1" },
+      { label: "20 years or above", value: "21" },
     ];
     for (let i = 1; i <= 19; i++) {
       yobOptions.push({
@@ -121,6 +145,9 @@ const Home = () => {
 
     return yobOptions;
   };
+
+  console.log("selectedYOB", selectedYOB);
+  console.log("selectedMOB", selectedMOB);
 
   const handleChangeYOB = (option: SelectOptionType | null) => {
     if (option) {
@@ -134,7 +161,7 @@ const Home = () => {
 
   const mobRenderOptions = (): SelectOptionType[] => {
     const mobOptions: SelectOptionType[] = [
-      { label: "Less than one month", value: "lessThanOneMonth" },
+      { label: "Less than one month", value: "1" },
     ];
     for (let i = 1; i <= 11; i++) {
       mobOptions.push({
@@ -170,7 +197,12 @@ const Home = () => {
             autoClose: 2000,
           });
         }
-        if (pet) {
+        if (pet && pet?.length > 0) {
+          if (pet[0]?.monthOfBirth)
+            setSelectedMOB(JSON.parse(pet[0].monthOfBirth));
+          if (pet[0]?.yearOfBirth)
+            setSelectedYOB(JSON.parse(pet[0].yearOfBirth));
+
           setSpeciesConfirmed(true);
           setPetInfo(pet[0] as unknown as PET);
           setSelectedBreed(pet[0].breed);
@@ -247,33 +279,38 @@ const Home = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    // Handle form submission logic here
+    let DataPet = petInfo;
+    if (!DataPet.knowsDateOfBirth) {
+      let year = Number(selectedYOB?.value);
+      let month = Number(selectedMOB?.value);
+      if (year && month) {
+        DataPet.dateOfBirth = calculateDateOfBirth(year, month);
+      }
+    }
     if (id) {
       const { data, error } = await supabase
         .from("pet")
-        .update(petInfo)
+        .update(DataPet)
         .eq("id", id);
       if (error) {
         setFormError("Please fill in all the fields correctly.");
         toast.error("Please fill in all the fields correctly.", {
           autoClose: 2000,
         });
-      }
-      if (data) {
+      } else {
         setFormError(null);
         navigate("/");
       }
     } else {
-      const { data, error } = await supabase.from("pet").insert([petInfo]);
-
+      const { data, error } = await supabase.from("pet").insert([DataPet]);
+      console.log("data", data, error);
       if (error) {
         console.log("data", data, error);
         setFormError("Please fill in all the fields correctly.");
         toast("Please fill in all the fields correctly.", {
           autoClose: 2000,
         });
-      }
-      if (data) {
+      } else {
         setFormError(null);
         navigate("/");
       }
@@ -290,6 +327,7 @@ const Home = () => {
 
   return (
     <Wrapper>
+      <ToastContainer />
       <FormStyled onSubmit={handleSubmitSpecies}>
         <Form.Group className="mb-3" controlId="species">
           {!speciesConfirmed && <Form.Label>{t("species")}</Form.Label>}
@@ -472,6 +510,7 @@ const Home = () => {
               onChange={handleChangeBreed}
               placeholder={<div>{t("selectBreed")}</div>}
               options={options}
+              required
             />
           </Form.Group>
 
@@ -561,6 +600,7 @@ const Home = () => {
                 value={petInfo.dateOfBirth}
                 max={new Date().toISOString().split("T")[0]}
                 onChange={handleChange}
+                required={petInfo.knowsDateOfBirth}
               />
             </Form.Group>
           ) : (
@@ -572,6 +612,7 @@ const Home = () => {
                   onChange={handleChangeYOB}
                   placeholder={<div>{t("formPlaceholders.yearOfBirth")}</div>}
                   options={yobRenderOptions()}
+                  required={!petInfo.knowsDateOfBirth}
                 />
               </Form.Group>
 
@@ -582,6 +623,7 @@ const Home = () => {
                   onChange={handleChangeMOB}
                   placeholder={<div>{t("formPlaceholders.monthOfBirth")}</div>}
                   options={mobRenderOptions()}
+                  required={!petInfo.knowsDateOfBirth}
                 />
               </Form.Group>
             </ContainerS>

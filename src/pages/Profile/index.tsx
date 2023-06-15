@@ -103,18 +103,17 @@ const Profile = () => {
         toast.error("Please fill in all the fields correctly.", {
           autoClose: 2000,
         });
-      }
+      } else navigate("/form");
     } else {
       const { error } = await supabase
         .from("profiles")
         .insert({ ...ownerInfo, userID: user.id });
-      navigate("/form");
       if (error) {
         setFetchError("Please fill in all the fields correctly.");
         toast.error("Please fill in all the fields correctly.", {
           autoClose: 2000,
         });
-      }
+      } else navigate("/form");
     }
   };
 
