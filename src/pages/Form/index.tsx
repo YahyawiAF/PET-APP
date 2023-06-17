@@ -200,7 +200,7 @@ const Home = () => {
           if (pet[0]?.yearOfBirth)
             setSelectedYOB(JSON.parse(pet[0].yearOfBirth));
 
-          setSpeciesConfirmed(true);
+          // setSpeciesConfirmed(true);
           setPetInfo(pet[0] as unknown as PET);
           setSelectedBreed(pet[0].breed);
         }
@@ -322,21 +322,40 @@ const Home = () => {
   };
 
   const handleBackToSpecies = () => {
-    setSpeciesConfirmed(false);
+    // setSpeciesConfirmed(false);
     setPetInfo((prevState) => ({
       ...prevState,
       species: null,
     }));
   };
 
+  console.log("species", petInfo.species);
+
   return (
     <Wrapper>
       <ToastContainer />
       <FormStyled onSubmit={handleSubmitSpecies}>
         <Form.Group className="mb-3" controlId="species">
-          {!speciesConfirmed && <Form.Label>{t("species")}</Form.Label>}
+          {petInfo.species === null && <Form.Label>{t("species")}</Form.Label>}
+          {petInfo.species && !id && (
+            <ButtonS
+              variant="primary"
+              type="submit"
+              style={{
+                padding: "0.3rem 1.2rem",
+                borderRadius: "30px 10px 10px 30px",
+                marginTop: "0px",
+              }}
+              onClick={handleBackToSpecies}
+            >
+              <IoMdArrowRoundBack
+                style={{ position: "relative", bottom: "2px", right: "9px" }}
+              />
+              Back
+            </ButtonS>
+          )}
           <SpeciesContainer>
-            {petInfo.species === SPECIES.cat && speciesConfirmed ? null : (
+            {petInfo.species === SPECIES.cat ? null : (
               <ImgContainer
                 className={petInfo.species === SPECIES.dog ? "active" : ""}
                 title="Dog"
@@ -354,7 +373,7 @@ const Home = () => {
               </ImgContainer>
             )}
 
-            {petInfo.species === SPECIES.dog && speciesConfirmed ? null : (
+            {petInfo.species === SPECIES.dog ? null : (
               <ImgContainer
                 className={petInfo.species === SPECIES.cat ? "active" : ""}
                 title="Cat"
@@ -373,8 +392,8 @@ const Home = () => {
             )}
           </SpeciesContainer>
         </Form.Group>
-
-        {speciesConfirmed || petInfo.species === null ? null : (
+        {/* 
+        {petInfo.species === null ? null : (
           <div className="d-flex justify-content-end">
             <ButtonS
               variant="primary"
@@ -384,30 +403,56 @@ const Home = () => {
               {t("confirm")}
             </ButtonS>
           </div>
-        )}
-        {speciesConfirmed && !id && (
-          <ButtonS
-            variant="primary"
-            type="submit"
-            style={{
-              position: "absolute",
-              top: "140px",
-              left: "104px",
-              padding: "0.3rem 1.2rem",
-              borderRadius: "30px 10px 10px 30px",
-            }}
-            onClick={handleBackToSpecies}
-          >
-            <IoMdArrowRoundBack
-              style={{ position: "relative", bottom: "2px", right: "9px" }}
-            />
-            Back
-          </ButtonS>
-        )}
+        )} */}
       </FormStyled>
 
-      {speciesConfirmed && (
+      {petInfo.species && (
         <FormStyled onSubmit={handleSubmit}>
+          <Form.Group
+            className="mb-3 d-flex flex-column"
+            controlId="mixedBreed"
+          >
+            <Label className="me-4">{t("mixedBreed")}</Label>
+            <Form.Check
+              inline
+              label={t("yes")}
+              name="mixedBreed"
+              id="mixedBreed-yes"
+              checked={petInfo.mixedBreed === true}
+              onChange={() =>
+                setPetInfo((prevState) => ({
+                  ...prevState,
+                  mixedBreed: true,
+                }))
+              }
+              type="radio"
+            />
+            <Form.Check
+              inline
+              label="No"
+              name="mixedBreed"
+              id="mixedBreed-no"
+              checked={petInfo.mixedBreed === false}
+              onChange={() =>
+                setPetInfo((prevState) => ({
+                  ...prevState,
+                  mixedBreed: false,
+                }))
+              }
+              type="radio"
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="breed">
+            <Label>{t("breedLabel")}</Label>
+            <Select
+              value={selectedBreed}
+              onChange={handleChangeBreed}
+              placeholder={<div>{t("selectBreed")}</div>}
+              options={options}
+              required
+            />
+          </Form.Group>
           <Form.Group className="mb-3" controlId="name">
             <Label>{t("petNameLabel")}</Label>
             <Control
@@ -471,52 +516,6 @@ const Home = () => {
               </Form.Group>
             </ContainerS>
           )}
-
-          <Form.Group
-            className="mb-3 d-flex flex-column"
-            controlId="mixedBreed"
-          >
-            <Label className="me-4">{t("mixedBreed")}</Label>
-            <Form.Check
-              inline
-              label={t("yes")}
-              name="mixedBreed"
-              id="mixedBreed-yes"
-              checked={petInfo.mixedBreed === true}
-              onChange={() =>
-                setPetInfo((prevState) => ({
-                  ...prevState,
-                  mixedBreed: true,
-                }))
-              }
-              type="radio"
-            />
-            <Form.Check
-              inline
-              label="No"
-              name="mixedBreed"
-              id="mixedBreed-no"
-              checked={petInfo.mixedBreed === false}
-              onChange={() =>
-                setPetInfo((prevState) => ({
-                  ...prevState,
-                  mixedBreed: false,
-                }))
-              }
-              type="radio"
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="breed">
-            <Label>{t("breedLabel")}</Label>
-            <Select
-              value={selectedBreed}
-              onChange={handleChangeBreed}
-              placeholder={<div>{t("selectBreed")}</div>}
-              options={options}
-              required
-            />
-          </Form.Group>
 
           {selectedBreed?.label === "Other" && (
             <Form.Group className="mb-3" controlId="breedName">
@@ -721,7 +720,7 @@ const Home = () => {
             />
           </Form.Group>
 
-          {!petInfo.gender && !petInfo.neutering && (
+          {/* {!petInfo.gender && !petInfo.neutering && (
             <Form.Group
               className="mb-3 d-flex flex-column"
               controlId="pregnant"
@@ -746,9 +745,9 @@ const Home = () => {
                 type="radio"
               />
             </Form.Group>
-          )}
+          )} */}
 
-          <Form.Group className="mb-3 d-flex flex-column" controlId="sick">
+          {/* <Form.Group className="mb-3 d-flex flex-column" controlId="sick">
             <Label className="me-4">{t("sickQuestion")}</Label>
             <Form.Check
               inline
@@ -768,9 +767,9 @@ const Home = () => {
               onChange={() => onchangeChecked("sick", false)}
               type="radio"
             />
-          </Form.Group>
+          </Form.Group> */}
 
-          <Form.Group
+          {/* <Form.Group
             className="mb-3 d-flex flex-column"
             controlId="heartwormPrevention"
           >
@@ -803,7 +802,7 @@ const Home = () => {
               }
               type="radio"
             />
-          </Form.Group>
+          </Form.Group> */}
 
           {/* Add more Form.Group components for additional fields */}
           <div className="d-flex justify-content-end">

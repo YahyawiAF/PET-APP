@@ -8,7 +8,7 @@ type Props = {
   pets: any[];
   onLoadMore: () => void;
   canLoadMore: boolean;
-  handleDelete: (id: string) => Promise<void>;
+  // handleDelete: (id: string) => Promise<void>;
 };
 
 const LoadMoreButton = styled.button`
@@ -20,7 +20,7 @@ export const CardList: FC<Props> = ({
   pets,
   onLoadMore,
   canLoadMore,
-  handleDelete,
+  // handleDelete,
 }) => {
   const { t } = useTranslation();
 
@@ -29,13 +29,13 @@ export const CardList: FC<Props> = ({
       <div className="py-5">
         <div className="row">
           {pets.map((pet) => (
-            <Col key={pet.id} md={4} lg={3} xl={3}>
+            <Col key={pet.id} sm={7} md={5} lg={4} xl={3}>
               <CardCat
                 key={pet.id}
                 pet={pet}
                 img={pet.url}
                 id={pet.id}
-                handleDelete={handleDelete}
+                // handleDelete={handleDelete}
               />
             </Col>
           ))}

@@ -71,6 +71,8 @@
 
   "addOwner": "Agregar Propietario",
 
+  "updateOwner": "Actualizar propietario",
+
   "home": "Hogar",
 
   "profile": "Perfil",
@@ -133,5 +135,5 @@
     "zipCode": "Ingrese el Código Postal"
   },
 
-  "consent": "¿Acepta recibir comunicasiones a través de los métodos de contacto proporcionados?"
+  "consent": "Marca esta casilla para dar tu consentimiento para recibir mensajes de texto, llamadas y/o correos electrónicos utilizando tu número de teléfono y correo electrónico proporcionados arriba, con el fin de recibir ayuda para iniciar sesión, recordatorios de mascotas y comunicaciones promocionales correspondientes."
 }

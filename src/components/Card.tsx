@@ -85,10 +85,10 @@ type Props = {
   img: string;
   id: string;
   pet: any;
-  handleDelete: (id: string) => Promise<void>;
+  // handleDelete: (id: string) => Promise<void>;
 };
 
-export const CardCat: FC<Props> = ({ img, id, pet, handleDelete }) => {
+export const CardCat: FC<Props> = ({ img, id, pet }) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -200,9 +200,9 @@ export const CardCat: FC<Props> = ({ img, id, pet, handleDelete }) => {
         <ButtonS onClick={() => navigate(`/form/${pet.id}`)}>
           {t("editPetInfoButton")}
         </ButtonS>
-        <ButtonS onClick={() => handleDelete(pet.id)}>
+        {/* <ButtonS onClick={() => handleDelete(pet.id)}>
           <AiOutlineDelete color="white" />
-        </ButtonS>
+        </ButtonS> */}
       </Card.Body>
     </CardStyled>
   );

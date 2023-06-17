@@ -24,8 +24,6 @@ const HomePage: FC = () => {
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [pets, setPets] = useState<Array<any> | null>();
   const { user } = useAuth();
-  const [showLanguageModal, setShowLanguageModal] = useState(false);
-  const [language, setLanguage] = useState<any | null>();
 
   const fetchSmoothies = useCallback(async () => {
     let { data: pet, error } = await supabase
@@ -48,33 +46,10 @@ const HomePage: FC = () => {
     }
   }, [user, fetchSmoothies]);
 
-  const handleDelete = async (id: string) => {
-    const { data, error } = await supabase.from("pet").delete().eq("id", id);
-    fetchSmoothies();
-  };
-
-  useEffect(() => {
-    if (user?.id) {
-      const fetchLanguage = async () => {
-        let { data: languageDate, error } = await supabase
-          .from("language")
-          .select()
-          .eq("userID", user?.id);
-        if (error || (languageDate && languageDate?.length === 0)) {
-          setFetchError("Could not fetch the smoothies");
-          setLanguage(null);
-          setShowLanguageModal(true);
-        }
-        if (languageDate && languageDate?.length > 0) {
-          setLanguage(languageDate);
-          setShowLanguageModal(false);
-          setFetchError(null);
-        }
-      };
-
-      fetchLanguage();
-    }
-  }, [user]);
+  // const handleDelete = async (id: string) => {
+  //   const { data, error } = await supabase.from("pet").delete().eq("id", id);
+  //   fetchSmoothies();
+  // };
 
   const handleLoadMore = () => {
     setCurrentPage(currentPage + 1);
@@ -86,10 +61,6 @@ const HomePage: FC = () => {
   }, [pets]);
 
   const navigate = useNavigate();
-
-  const handleCloseLanguageModal = () => {
-    setShowLanguageModal(false);
-  };
 
   return (
     <Wrapper className="container">
@@ -105,17 +76,12 @@ const HomePage: FC = () => {
         <CardList
           pets={pets}
           onLoadMore={handleLoadMore}
-          handleDelete={handleDelete}
+          // handleDelete={handleDelete}
           canLoadMore={canLoadMore}
         />
       ) : loading ? (
         <Loader />
       ) : null}
-      <LanguageModal
-        language={language}
-        show={showLanguageModal}
-        handleClose={handleCloseLanguageModal}
-      />
     </Wrapper>
   );
 };

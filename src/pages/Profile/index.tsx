@@ -6,6 +6,8 @@ import supabase from "../../config/supabaseClient";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import LanguageModal from "../../components/languageModal/LanguageModal";
+import { profile } from "console";
 
 interface PROFILE {
   firstName: string;
@@ -38,6 +40,10 @@ const Profile = () => {
   const navigate = useNavigate();
 
   const { user } = useAuth();
+  const [language, setLanguage] = useState<any | null>();
+  const [showLanguageModal, setShowLanguageModal] = useState(false);
+  const [newOwner, setNewOwner] = useState(true);
+
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [ownerInfo, setOwnerInfo] = useState<PROFILE>({
     firstName: "",
@@ -47,9 +53,36 @@ const Profile = () => {
     email: user.email,
     communicationConsent: false,
     city: "",
-    state: "",
+    state: "TX",
     zipCode: "",
   });
+
+  useEffect(() => {
+    if (user?.id) {
+      const fetchLanguage = async () => {
+        let { data: languageDate, error } = await supabase
+          .from("language")
+          .select()
+          .eq("userID", user?.id);
+        if (error || (languageDate && languageDate?.length === 0)) {
+          setFetchError("Could not fetch the smoothies");
+          setLanguage(null);
+          setShowLanguageModal(true);
+        }
+        if (languageDate && languageDate?.length > 0) {
+          setLanguage(languageDate);
+          setShowLanguageModal(false);
+          setFetchError(null);
+        }
+      };
+
+      fetchLanguage();
+    }
+  }, [user]);
+
+  const handleCloseLanguageModal = () => {
+    setShowLanguageModal(false);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -69,11 +102,15 @@ const Profile = () => {
 
   useEffect(() => {
     if (user?.id) {
+      // setNewOwner(true);
+
       const fetchProfile = async () => {
         let { data: profile, error } = await supabase
           .from("profiles")
           .select()
           .eq("userID", user?.id);
+        console.log("owner profile", profile);
+
         if (error) {
           setFetchError("Could not fetch the profile");
 
@@ -84,11 +121,14 @@ const Profile = () => {
 
         if (profile && profile?.length > 0) {
           setOwnerInfo(profile[0] as unknown as PROFILE);
+          setNewOwner(false);
         }
       };
       fetchProfile();
     }
   }, [user]);
+
+  // console.log("profile", profile); // Add this line to log the profile
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -116,9 +156,15 @@ const Profile = () => {
       } else navigate("/form");
     }
   };
+  console.log("new owner", newOwner);
 
   return (
     <Wrapper>
+      <LanguageModal
+        language={language}
+        show={showLanguageModal}
+        handleClose={handleCloseLanguageModal}
+      />
       <FormStyled onSubmit={handleSubmit}>
         <ContainerS className="d-flex gap-4 justify-content-between p-0">
           <Form.Group className="fied-name mb-3 w-100" controlId="firstName">
@@ -241,7 +287,7 @@ const Profile = () => {
         <div className="d-flex justify-content-end">
           {ownerInfo.communicationConsent && (
             <ButtonS variant="primary" type="submit">
-              {t("addOwner")}
+              {newOwner ? t("addOwner") : t("updateOwner")}
             </ButtonS>
           )}
         </div>

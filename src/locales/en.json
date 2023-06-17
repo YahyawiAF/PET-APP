@@ -71,6 +71,8 @@
 
   "addOwner": "Add Owner",
 
+  "updateOwner": "Update Owner",
+
   "home": "Home",
 
   "profile": "Profile",
@@ -132,5 +134,5 @@
 
     "zipCode": "Enter postal code"
   },
-  "consent": "Do you consent to communication via provided contact methods?"
+  "consent": "Check this box to give your consent to receive text, calls, and/or email messages using your phone number and email above for login help, pet reminders, and applicable promotional communications."
 }

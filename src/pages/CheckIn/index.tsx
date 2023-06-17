@@ -1,4 +1,4 @@
-import { Button, Form } from "react-bootstrap";
+import { Button, Container, Form } from "react-bootstrap";
 import styled from "styled-components";
 import { FC, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -50,7 +50,7 @@ const PetCheckItem: FC<IPetCheckItemProps> = ({
   pet,
   petCheckIn,
 }) => {
-  const [moreInfo, setMoreInfo] = useState(false);
+  const [moreInfo, setMoreInfo] = useState(true);
   const { t } = useTranslation();
   return (
     <>
@@ -89,6 +89,47 @@ const PetCheckItem: FC<IPetCheckItemProps> = ({
             <span>{pet.dateOfBirth}</span>
           </div>
         </StyledDiv>
+
+        <GridS>
+          <Form.Group className="" controlId="pregnant">
+            <FormCheckS2
+              inline
+              label={t("pregnantQuestion")}
+              name="pregnant"
+              // checked={petCheckIn.filter((v: any) => v === pet.id).length > 0}
+              // onChange={() => handleChangeCheckbox(pet.id)}
+              // checked={petInfo.pregnant === true}
+              // onChange={() => onchangeChecked("pregnant", true)}
+              type="checkbox"
+            />
+          </Form.Group>
+
+          <Form.Group className="" controlId="sick">
+            <FormCheckS2
+              inline
+              label={t("sickQuestion")}
+              name="sick"
+              // checked={petCheckIn.filter((v: any) => v === pet.id).length > 0}
+              // onChange={() => handleChangeCheckbox(pet.id)}
+              // checked={petInfo.pregnant === true}
+              // onChange={() => onchangeChecked("pregnant", true)}
+              type="checkbox"
+            />
+          </Form.Group>
+
+          <Form.Group className="" controlId="heartwormPrevention">
+            <FormCheckS2
+              inline
+              label={t("heartwormPrevention")}
+              name="heartwormPrevention"
+              // checked={petCheckIn.filter((v: any) => v === pet.id).length > 0}
+              // onChange={() => handleChangeCheckbox(pet.id)}
+              // checked={petInfo.pregnant === true}
+              // onChange={() => onchangeChecked("pregnant", true)}
+              type="checkbox"
+            />
+          </Form.Group>
+        </GridS>
       </FormGroupS>
     </>
   );
@@ -100,7 +141,7 @@ const CheckIn = () => {
 
   const [petCheckIn, setPetCheckIn] = useState<Array<number>>([]);
   const [ID, setID] = useState<string>("");
-  const [moreInfo, setMoreInfo] = useState(false);
+  // const [moreInfo, setMoreInfo] = useState(true);
   const [formError, setFormError] = useState<string | null>(null);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [petsList, setPets] = useState<Array<PET>>([]);
@@ -160,12 +201,14 @@ const CheckIn = () => {
         .insert({ list: petCheckIn, userID: user.id });
     }
   };
+  console.log("petsList", petsList);
 
   return (
     <Wrapper>
       <WrapperForm>
         {petsList?.map((pet) => (
           <PetCheckItem
+            key={pet.id}
             pet={pet}
             handleChangeCheckbox={handleChangeCheckbox}
             petCheckIn={petCheckIn}
@@ -225,9 +268,28 @@ const FormCheckS = styled(Form.Check)`
   }
 `;
 
+const FormCheckS2 = styled(Form.Check)`
+  position: relative;
+  font-weight: 400;
+  color: #6c6c6c;
+  padding-left: 2rem;
+  font-size: 15px;
+  .form-check-input[type="checkbox"] {
+    border-radius: 5px;
+    font-size: 16px;
+    box-shadow: 0 0 0px 1px #a1a0a0;
+  }
+  .form-check-label {
+    text-align: center;
+    @media only screen and (max-width: 600px) {
+      text-align: left !important;
+    }
+  }
+`;
+
 const ButtonS = styled(Button)`
   width: 25px;
-  height: 26px;
+  height: 25px;
   position: absolute;
   right: 8px;
   top: 8px;
@@ -238,23 +300,25 @@ const ButtonS = styled(Button)`
   &:hover {
     background: #727070;
   }
+  &:active {
+    background: #727070 !important;
+  }
 
   svg {
     position: absolute;
-    top: 1px;
+    top: 0px;
     right: 0px;
     width: 25px;
-    height: 24px;
+    height: 25px;
   }
 `;
 
 const StyledDiv = styled("div")`
   color: #6c6c6c;
   background: #f2f2f2;
-  // box-shadow: 0 0 0 3px #a1a0a0;
   border-radius: 5px;
-  padding: 0.5rem 1rem;
-  font-weight: 500;
+  padding: 0.5rem 1rem 0.5rem 3rem;
+  font-weight: 400;
 `;
 
 const SubmitButton = styled(Button)`
@@ -268,6 +332,25 @@ const SubmitButton = styled(Button)`
     border: 2px solid var(--dark);
     background: white;
     color: black;
+  }
+`;
+
+const GridS = styled("div")`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  justify-items: start;
+  align-items: start;
+  border-top: 1px dashed #a1a0a0;
+  padding: 0.8rem 0.5rem 0.5rem;
+  margin-top: 1rem;
+  width: 90%;
+  margin-inline: auto;
+
+  @media only screen and (max-width: 600px) {
+    display: block;
+    width: 100%;
+    margin-top: 0.6rem;
+    padding-left: 1rem;
   }
 `;
 
