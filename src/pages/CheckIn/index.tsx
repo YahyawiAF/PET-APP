@@ -96,10 +96,6 @@ const PetCheckItem: FC<IPetCheckItemProps> = ({
               inline
               label={t("pregnantQuestion")}
               name="pregnant"
-              // checked={petCheckIn.filter((v: any) => v === pet.id).length > 0}
-              // onChange={() => handleChangeCheckbox(pet.id)}
-              // checked={petInfo.pregnant === true}
-              // onChange={() => onchangeChecked("pregnant", true)}
               type="checkbox"
             />
           </Form.Group>
@@ -109,10 +105,6 @@ const PetCheckItem: FC<IPetCheckItemProps> = ({
               inline
               label={t("sickQuestion")}
               name="sick"
-              // checked={petCheckIn.filter((v: any) => v === pet.id).length > 0}
-              // onChange={() => handleChangeCheckbox(pet.id)}
-              // checked={petInfo.pregnant === true}
-              // onChange={() => onchangeChecked("pregnant", true)}
               type="checkbox"
             />
           </Form.Group>
@@ -122,10 +114,6 @@ const PetCheckItem: FC<IPetCheckItemProps> = ({
               inline
               label={t("heartwormPrevention")}
               name="heartwormPrevention"
-              // checked={petCheckIn.filter((v: any) => v === pet.id).length > 0}
-              // onChange={() => handleChangeCheckbox(pet.id)}
-              // checked={petInfo.pregnant === true}
-              // onChange={() => onchangeChecked("pregnant", true)}
               type="checkbox"
             />
           </Form.Group>
@@ -168,8 +156,6 @@ const CheckIn = () => {
           setID(checkinlist[0]?.id);
         }
 
-        console.log("checkinlist", checkinlist);
-
         let { data: pet, error } = await supabase
           .from("pet")
           .select()
@@ -201,7 +187,6 @@ const CheckIn = () => {
         .insert({ list: petCheckIn, userID: user.id });
     }
   };
-  console.log("petsList", petsList);
 
   return (
     <Wrapper>

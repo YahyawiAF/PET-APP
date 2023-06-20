@@ -34,13 +34,10 @@ interface PET {
   neutering: boolean;
   vaccinationReaction: boolean;
   gender: boolean;
-  sick: boolean;
-  pregnant: boolean;
   knowsDateOfBirth: boolean;
   userID: string;
   mixedBreed: boolean;
   VaccineTextarea: string;
-  heartwormPrevention: boolean;
   species: SPECIES | null;
 }
 
@@ -108,12 +105,9 @@ const Home = () => {
     neutering: false,
     vaccinationReaction: false,
     gender: false,
-    sick: false,
-    pregnant: false,
     userID: user.id,
     mixedBreed: false,
     VaccineTextarea: "",
-    heartwormPrevention: false,
     species: null,
 
     // Add more fields as needed
