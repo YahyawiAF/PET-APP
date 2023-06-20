@@ -7,18 +7,20 @@ import { CgShapeHexagon } from "react-icons/cg";
 import { AiOutlineDelete } from "react-icons/ai";
 
 import Cat from "../assets/cat.jpg";
-import { Button } from "react-bootstrap";
+import { Button, Stack } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import supabase from "../config/supabaseClient";
 
 const CardStyled = styled(Card)`
   border-radius: 0;
-  box-shadow: 0px 0px 20px 3px #9f9d9de5;
+  box-shadow: 0px 0px 6px 4px #dcdcdc;
+  padding: 1rem;
+  border-radius: 5px;
   background: white;
   transition: 0.3s all ease;
   &:hover {
     transform: scale(0.99);
-    box-shadow: 0px 0px 5px 2px #9f9d9de5;
+    box-shadow: 0px 0px 2px 1px #dcdcdc;
   }
 `;
 const CardTitle = styled(Card.Title)`
@@ -59,6 +61,8 @@ const ButtonS = styled(Button)`
   background: var(--dark);
   border: 2px solid white;
   transition: 0.4s all;
+  margin-top: 2rem;
+  width: 150px;
   &:hover {
     border: 2px solid var(--dark);
     background: white;
@@ -98,7 +102,7 @@ export const CardCat: FC<Props> = ({ img, id, pet }) => {
         <CardImg  variant="top" src={Cat} />
       </ImageWrapper> */}
       <Card.Body>
-        <CardTitle className="d-flex gap-2">
+        <CardTitle className="d-flex gap-2 mb-4">
           <span className="fw-bold">
             {t("petNameLabel")}
             {":"}
@@ -126,7 +130,15 @@ export const CardCat: FC<Props> = ({ img, id, pet }) => {
             {t("genderLabel")}
             {":"}
           </span>{" "}
-          {pet.gender}
+          {pet.gender === "M"
+            ? t("male")
+            : pet.gender === "F"
+            ? t("female")
+            : pet.gender === "MN"
+            ? t("maleNeutered")
+            : pet.gender === "FS"
+            ? t("femaleSpayed")
+            : null}
         </CardText>
 
         <CardText>
@@ -197,9 +209,12 @@ export const CardCat: FC<Props> = ({ img, id, pet }) => {
           </span>
           <span className="fw-bold">Sick:</span> {pet.sick ? "Yes" : "No"}
         </CardText> */}
-        <ButtonS onClick={() => navigate(`/form/${pet.id}`)}>
-          {t("editPetInfoButton")}
-        </ButtonS>
+        <div className="w-100 d-flex justify-content-center">
+          <ButtonS onClick={() => navigate(`/form/${pet.id}`)}>
+            {t("editPetInfoButton")}
+          </ButtonS>
+        </div>
+
         {/* <ButtonS onClick={() => handleDelete(pet.id)}>
           <AiOutlineDelete color="white" />
         </ButtonS> */}

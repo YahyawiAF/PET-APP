@@ -33,14 +33,14 @@ interface PET {
   isFirstVaccination: boolean;
   neutering: boolean;
   vaccinationReaction: boolean;
-  gender: boolean;
-  sick: boolean;
-  pregnant: boolean;
+  gender: string;
+  // sick: boolean;
+  // pregnant: boolean;
   knowsDateOfBirth: boolean;
   userID: string;
   mixedBreed: boolean;
   VaccineTextarea: string;
-  heartwormPrevention: boolean;
+  // heartwormPrevention: boolean;
   species: SPECIES | null;
 }
 
@@ -107,19 +107,21 @@ const Home = () => {
     isFirstVaccination: false,
     neutering: false,
     vaccinationReaction: false,
-    gender: false,
-    sick: false,
-    pregnant: false,
+    gender: "M",
+    // sick: false,
+    // pregnant: false,
     userID: user.id,
     mixedBreed: false,
     VaccineTextarea: "",
-    heartwormPrevention: false,
+    // heartwormPrevention: false,
     species: null,
 
     // Add more fields as needed
   });
 
-  const [speciesConfirmed, setSpeciesConfirmed] = useState(false);
+  console.log("gender", petInfo.gender);
+
+  // const [speciesConfirmed, setSpeciesConfirmed] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const navigate = useNavigate();
 
@@ -531,16 +533,16 @@ const Home = () => {
             </Form.Group>
           )}
 
-          <Form.Group className="mb-3 d-flex flex-column" controlId="gender">
+          {/* <Form.Group className="mb-3 d-flex flex-column" controlId="gender">
             <Label className="me-4">{t("genderQuestion")}</Label>
             <Form.Check
               inline
               label={t("male")}
               name="gender"
               id="gender-male"
-              checked={petInfo.gender === true}
+              checked={petInfo.gender === "M"}
               onChange={() =>
-                setPetInfo((prevState) => ({ ...prevState, gender: true }))
+                setPetInfo((prevState) => ({ ...prevState, gender: "M" }))
               }
               type="radio"
             />
@@ -549,10 +551,102 @@ const Home = () => {
               label={t("female")}
               name="gender"
               id="gender-female"
-              checked={petInfo.gender === false}
+              checked={petInfo.gender === "F"}
               onChange={() =>
-                setPetInfo((prevState) => ({ ...prevState, gender: false }))
+                setPetInfo((prevState) => ({ ...prevState, gender: "F" }))
               }
+              type="radio"
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3 d-flex flex-column" controlId="neutering">
+            <Label className="me-4">{t("neuteredQuestion")}</Label>
+            <Form.Check
+              inline
+              label={t("yes")}
+              name="neutering"
+              id="neutering-yes"
+              checked={petInfo.neutering === true}
+              onChange={() => onchangeChecked("neutering", true)}
+              type="radio"
+            />
+            <Form.Check
+              inline
+              label="No"
+              name="neutering"
+              id="neutering-no"
+              checked={petInfo.neutering === false}
+              onChange={() => onchangeChecked("neutering", false)}
+              type="radio"
+            />
+          </Form.Group> */}
+
+          <Form.Group className="mb-3 d-flex flex-column" controlId="gender">
+            <Label className="me-4">{t("genderQuestion")}</Label>
+            <Form.Check
+              inline
+              label={t("male")}
+              name="gender"
+              id="gender-male"
+              checked={petInfo.gender === "M" || petInfo.gender === "MN"}
+              onChange={() => {
+                if (petInfo.neutering) {
+                  setPetInfo((prevState) => ({ ...prevState, gender: "MN" }));
+                } else {
+                  setPetInfo((prevState) => ({ ...prevState, gender: "M" }));
+                }
+              }}
+              type="radio"
+            />
+            <Form.Check
+              inline
+              label={t("female")}
+              name="gender"
+              id="gender-female"
+              checked={petInfo.gender === "F" || petInfo.gender === "FS"}
+              onChange={() => {
+                if (petInfo.neutering) {
+                  setPetInfo((prevState) => ({ ...prevState, gender: "FS" }));
+                } else {
+                  setPetInfo((prevState) => ({ ...prevState, gender: "F" }));
+                }
+              }}
+              type="radio"
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3 d-flex flex-column" controlId="neutering">
+            <Label className="me-4">{t("neuteredQuestion")}</Label>
+            <Form.Check
+              inline
+              label={t("yes")}
+              name="neutering"
+              id="neutering-yes"
+              checked={petInfo.neutering === true}
+              onChange={() => {
+                if (petInfo.gender === "M") {
+                  setPetInfo((prevState) => ({ ...prevState, gender: "MN" }));
+                } else if (petInfo.gender === "F") {
+                  setPetInfo((prevState) => ({ ...prevState, gender: "FS" }));
+                }
+                setPetInfo((prevState) => ({ ...prevState, neutering: true }));
+              }}
+              type="radio"
+            />
+            <Form.Check
+              inline
+              label="No"
+              name="neutering"
+              id="neutering-no"
+              checked={petInfo.neutering === false}
+              onChange={() => {
+                if (petInfo.gender === "MN") {
+                  setPetInfo((prevState) => ({ ...prevState, gender: "M" }));
+                } else if (petInfo.gender === "FS") {
+                  setPetInfo((prevState) => ({ ...prevState, gender: "F" }));
+                }
+                setPetInfo((prevState) => ({ ...prevState, neutering: false }));
+              }}
               type="radio"
             />
           </Form.Group>
@@ -697,28 +791,6 @@ const Home = () => {
               />
             </Form.Group>
           )}
-
-          <Form.Group className="mb-3 d-flex flex-column" controlId="neutering">
-            <Label className="me-4">{t("neuteredQuestion")}</Label>
-            <Form.Check
-              inline
-              label={t("yes")}
-              name="neutering"
-              id="neutering-yes"
-              checked={petInfo.neutering === true}
-              onChange={() => onchangeChecked("neutering", true)}
-              type="radio"
-            />
-            <Form.Check
-              inline
-              label="No"
-              name="neutering"
-              id="neutering-no"
-              checked={petInfo.neutering === false}
-              onChange={() => onchangeChecked("neutering", false)}
-              type="radio"
-            />
-          </Form.Group>
 
           {/* {!petInfo.gender && !petInfo.neutering && (
             <Form.Group

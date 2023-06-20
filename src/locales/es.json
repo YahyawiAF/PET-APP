@@ -83,6 +83,10 @@
 
   "female": "hembra",
 
+  "maleNeutered": "Macho castrado",
+
+  "femaleSpayed": "Hembra esterilizada",
+
   "mixedBreed": "¿Tu mascota es de raza mixta?",
 
   "breedName": "¿Cuál es la raza de tu mascota?",

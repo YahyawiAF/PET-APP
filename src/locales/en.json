@@ -79,9 +79,13 @@
 
   "logout": "Logout",
 
-  "male": "male",
+  "male": "Male",
 
-  "female": "female",
+  "female": "Female",
+
+  "maleNeutered": "Male Neutered",
+
+  "femaleSpayed": "Female Spayed",
 
   "mixedBreed": "Is your pet a mixed breed?",
 

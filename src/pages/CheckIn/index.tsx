@@ -1,6 +1,6 @@
 import { Button, Container, Form } from "react-bootstrap";
 import styled from "styled-components";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../context/AuthProvider";
@@ -11,6 +11,12 @@ import supabase from "../../config/supabaseClient";
 enum SPECIES {
   dog = 1,
   cat = 2,
+}
+
+interface PETINFO {
+  sick: boolean;
+  pregnant: boolean;
+  heartwormPrevention: boolean;
 }
 
 interface PET {
@@ -28,7 +34,7 @@ interface PET {
   isFirstVaccination: boolean;
   neutering: boolean;
   vaccinationReaction: boolean;
-  gender: boolean;
+  gender: string;
   sick: boolean;
   pregnant: boolean;
   knowsDateOfBirth: boolean;
@@ -40,18 +46,54 @@ interface PET {
 }
 
 interface IPetCheckItemProps {
-  petCheckIn: Array<number>;
+  petCheckIn: Array<{ id: number; petInfo: PETINFO }>;
   pet: PET;
-  handleChangeCheckbox: (id: number) => void;
+  handleChangeCheckbox: (id: number, petInfo: PETINFO) => void;
+  handleUpdateList: (id: number, petInfo: PETINFO) => void;
 }
 
 const PetCheckItem: FC<IPetCheckItemProps> = ({
   handleChangeCheckbox,
+  handleUpdateList,
   pet,
   petCheckIn,
 }) => {
   const [moreInfo, setMoreInfo] = useState(true);
   const { t } = useTranslation();
+
+  const [petInfo, setPetInfo] = useState<PETINFO>({
+    sick: false,
+    pregnant: false,
+    heartwormPrevention: false,
+
+    // Add more fields as needed
+  });
+
+  useEffect(() => {
+    let res = petCheckIn.filter((petD) => petD.id === pet.id);
+    if (res.length > 0) {
+      setPetInfo(res[0].petInfo as unknown as PETINFO);
+    } else
+      setPetInfo({
+        sick: false,
+        pregnant: false,
+        heartwormPrevention: false,
+      });
+  }, [petCheckIn, pet]);
+
+  // useEffect(() => {
+  //   handleUpdateList(pet.id, petInfo);
+  // }, [handleUpdateList, pet, petInfo]);
+
+  const handleChangeQuestions = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = e.target;
+    setPetInfo((prevState) => ({
+      ...prevState,
+      [name]: checked,
+    }));
+    handleUpdateList(pet.id, petInfo);
+  };
+
   return (
     <>
       <FormGroupS className="mb-4 d-flex flex-column " controlId="checkIn">
@@ -59,8 +101,8 @@ const PetCheckItem: FC<IPetCheckItemProps> = ({
           inline
           label={pet.name}
           name="checkIn"
-          checked={petCheckIn.filter((v: any) => v === pet.id).length > 0}
-          onChange={() => handleChangeCheckbox(pet.id)}
+          checked={petCheckIn.filter((v: any) => v.id === pet.id).length > 0}
+          onChange={() => handleChangeCheckbox(pet.id, petInfo)}
           type="checkbox"
         />
         <ButtonS
@@ -82,7 +124,17 @@ const PetCheckItem: FC<IPetCheckItemProps> = ({
           </div>
           <div>
             <span>{t("genderLabel")}: </span>
-            <span>{pet.gender}</span>
+            <span>
+              {pet.gender === "M"
+                ? t("male")
+                : pet.gender === "F"
+                ? t("female")
+                : pet.gender === "MN"
+                ? t("maleNeutered")
+                : pet.gender === "FS"
+                ? t("femaleSpayed")
+                : null}
+            </span>
           </div>
           <div>
             <span>{t("dateOfBirth")}: </span>
@@ -91,28 +143,26 @@ const PetCheckItem: FC<IPetCheckItemProps> = ({
         </StyledDiv>
 
         <GridS>
-          <Form.Group className="" controlId="pregnant">
-            <FormCheckS2
-              inline
-              label={t("pregnantQuestion")}
-              name="pregnant"
-              // checked={petCheckIn.filter((v: any) => v === pet.id).length > 0}
-              // onChange={() => handleChangeCheckbox(pet.id)}
-              // checked={petInfo.pregnant === true}
-              // onChange={() => onchangeChecked("pregnant", true)}
-              type="checkbox"
-            />
-          </Form.Group>
+          {pet.gender === "F" && (
+            <Form.Group className="" controlId="pregnant">
+              <FormCheckS2
+                inline
+                label={t("pregnantQuestion")}
+                name="pregnant"
+                checked={petInfo.pregnant}
+                onChange={handleChangeQuestions}
+                type="checkbox"
+              />
+            </Form.Group>
+          )}
 
           <Form.Group className="" controlId="sick">
             <FormCheckS2
               inline
               label={t("sickQuestion")}
               name="sick"
-              // checked={petCheckIn.filter((v: any) => v === pet.id).length > 0}
-              // onChange={() => handleChangeCheckbox(pet.id)}
-              // checked={petInfo.pregnant === true}
-              // onChange={() => onchangeChecked("pregnant", true)}
+              checked={petInfo.sick}
+              onChange={handleChangeQuestions}
               type="checkbox"
             />
           </Form.Group>
@@ -122,10 +172,8 @@ const PetCheckItem: FC<IPetCheckItemProps> = ({
               inline
               label={t("heartwormPrevention")}
               name="heartwormPrevention"
-              // checked={petCheckIn.filter((v: any) => v === pet.id).length > 0}
-              // onChange={() => handleChangeCheckbox(pet.id)}
-              // checked={petInfo.pregnant === true}
-              // onChange={() => onchangeChecked("pregnant", true)}
+              checked={petInfo.heartwormPrevention === true}
+              onChange={handleChangeQuestions}
               type="checkbox"
             />
           </Form.Group>
@@ -139,21 +187,30 @@ const CheckIn = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
 
-  const [petCheckIn, setPetCheckIn] = useState<Array<number>>([]);
+  const [petCheckIn, setPetCheckIn] = useState<
+    Array<{ id: number; petInfo: PETINFO }>
+  >([]);
   const [ID, setID] = useState<string>("");
   // const [moreInfo, setMoreInfo] = useState(true);
   const [formError, setFormError] = useState<string | null>(null);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [petsList, setPets] = useState<Array<PET>>([]);
 
-  const handleChangeCheckbox = (id: number) => {
-    if (petCheckIn?.filter((v) => v === id).length > 0) {
-      let newList = petCheckIn?.filter((v) => v !== id);
+  const handleChangeCheckbox = (id: number, petInfo: PETINFO) => {
+    if (petCheckIn?.filter((v) => v.id === id).length > 0) {
+      let newList = petCheckIn?.filter((v) => v.id !== id);
       setPetCheckIn(newList);
     } else {
-      setPetCheckIn((prevState) => [...prevState, id]);
+      setPetCheckIn((prevState) => [...prevState, { id, petInfo }]);
     }
   };
+
+  const handleUpdateList = (id: number, petInfo: PETINFO) => {
+    let newList = petCheckIn?.filter((v) => v.id !== id);
+    setPetCheckIn([...newList, { id, petInfo }]);
+  };
+
+  console.log("petCheckIn : ", petCheckIn);
 
   useEffect(() => {
     if (user?.id) {
@@ -168,7 +225,7 @@ const CheckIn = () => {
           setID(checkinlist[0]?.id);
         }
 
-        console.log("checkinlist", checkinlist);
+        // console.log("checkinlist", checkinlist);
 
         let { data: pet, error } = await supabase
           .from("pet")
@@ -201,7 +258,7 @@ const CheckIn = () => {
         .insert({ list: petCheckIn, userID: user.id });
     }
   };
-  console.log("petsList", petsList);
+  // console.log("petsList", petsList);
 
   return (
     <Wrapper>
@@ -211,6 +268,7 @@ const CheckIn = () => {
             key={pet.id}
             pet={pet}
             handleChangeCheckbox={handleChangeCheckbox}
+            handleUpdateList={handleUpdateList}
             petCheckIn={petCheckIn}
           />
         ))}
@@ -225,6 +283,8 @@ const CheckIn = () => {
     </Wrapper>
   );
 };
+
+export default CheckIn;
 
 const Wrapper = styled.div`
   display: flex;
@@ -353,5 +413,3 @@ const GridS = styled("div")`
     padding-left: 1rem;
   }
 `;
-
-export default CheckIn;

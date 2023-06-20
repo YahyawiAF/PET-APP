@@ -27,9 +27,9 @@ export const CardList: FC<Props> = ({
   return (
     <main role="main">
       <div className="py-5">
-        <div className="row">
+        <div className="row   justify-content-center">
           {pets.map((pet) => (
-            <Col key={pet.id} sm={7} md={5} lg={4} xl={3}>
+            <Col key={pet.id} sm={10} md={7} lg={5} xl={5} xxl={4}>
               <CardCat
                 key={pet.id}
                 pet={pet}
